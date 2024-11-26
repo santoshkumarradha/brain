@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+tinydb
+pydantic
+cloudpickle
+requests
+rich
+click
