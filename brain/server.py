@@ -36,8 +36,6 @@ class ExecuteRequest(BaseModel):
 @app.post("/register_reasoner/")
 async def register_reasoner(request: RegisterRequest):
     reasoner_name = request.reasoner_name
-    reasoner_code = base64.b64decode(request.reasoner_code)
-    reasoner = cloudpickle.loads(reasoner_code)
 
     # Create a unique reasoner ID
     reasoner_id = f"{reasoner_name}_v{len(reasoner_db) + 1}"
