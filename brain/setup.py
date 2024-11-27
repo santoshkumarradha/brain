@@ -21,7 +21,7 @@ setup(
         ],
     },
     author="santosh kumar radha",
-    author_email="instrument.santosh@gmail.com",
+    author_email="instrument.santosh@gmail.com",re
     description="A package for registering and executing AI",
     classifiers=[
         "Programming Language :: Python :: 3",
