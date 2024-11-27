@@ -68,6 +68,9 @@ async def execute_reasoner(request: ExecuteRequest):
     reasoner = cloudpickle.loads(base64.b64decode(result[0]["reasoner_code"]))
     inputs = cloudpickle.loads(base64.b64decode(request.inputs))
 
+    # Capture start time
+    start_time = datetime.now(timezone.utc)
+
     # Execute the reasoner
     llm_input = reasoner(**inputs)
     llm_input = convert_prompt(llm_input)
@@ -78,6 +81,12 @@ async def execute_reasoner(request: ExecuteRequest):
     # Generate response
     response = llm.generate(prompt=llm_input.format(), schema=schema)
 
+    # Capture stop time
+    stop_time = datetime.now(timezone.utc)
+
+    # Calculate duration
+    duration = (stop_time - start_time).total_seconds()
+
     # Store lineage information if session_id is present
     if request.session_id:
         lineage_db.insert(
@@ -85,8 +94,10 @@ async def execute_reasoner(request: ExecuteRequest):
                 "session_id": request.session_id,
                 "reasoner_id": reasoner_id,
                 "inputs": str(inputs),  # Store string representation of inputs
-                "result": response.dict(),  # Store string representation of result
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "result": str(response),  # Store string representation of result
+                "timestamp": start_time.isoformat(),
+                "stop_time": stop_time.isoformat(),  # Stop time
+                "duration": duration,  # Duration in seconds
             }
         )
 
