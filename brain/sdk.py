@@ -7,7 +7,7 @@ import cloudpickle
 import requests
 from pydantic import create_model
 
-from .utils import schema_to_pydantic_class
+from .utils import create_dynamic_pydantic_model
 
 # Thread-local storage for session context
 current_session_id: ContextVar[str] = ContextVar("current_session_id", default=None)
@@ -48,7 +48,7 @@ class BrainClient:
             if response.status_code == 200:
                 response_data = response.json()
                 if response_data.get("schema"):
-                    return schema_to_pydantic_class(response_data["schema"])(
+                    return create_dynamic_pydantic_model(response_data["schema"])(
                         **response_data["result"]
                     )
                 return response_data

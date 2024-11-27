@@ -10,7 +10,7 @@ from tinydb import Query, TinyDB
 
 from .llm import OpenAILLM
 from .schema import convert_prompt
-from .utils import schema_to_pydantic_class
+from .utils import create_dynamic_pydantic_model
 
 app = FastAPI()
 llm = OpenAILLM(model_name="gpt-4o-mini")
@@ -76,11 +76,11 @@ async def execute_reasoner(request: ExecuteRequest):
     llm_input = convert_prompt(llm_input)
 
     schema_dict = result[0].get("schema")
-    schema = schema_to_pydantic_class(schema_dict)
+    schema = create_dynamic_pydantic_model(schema_dict)
 
     # Generate response
     response = llm.generate(prompt=llm_input.format(), schema=schema)
-
+    print(response)
     # Capture stop time
     stop_time = datetime.now(timezone.utc)
 
