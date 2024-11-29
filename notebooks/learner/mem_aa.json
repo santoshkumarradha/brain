@@ -1,5 +1,105 @@
 {
-  "next_knowledge_id": 1,
-  "positive_knowledge": [],
-  "negative_knowledge": []
+  "next_knowledge_id": 40,
+  "positive_knowledge": [
+    {
+      "id": 2,
+      "content": "Recognizing that each transformation has specific rules and applications is essential for achieving diverse goal outputs.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:22:40.076674",
+      "last_updated": "2024-11-29 12:22:40.076675"
+    },
+    {
+      "id": 5,
+      "content": "Understanding that transformation rules can be context-dependent and vary by the type of transformation required is vital for flexibility and accuracy in producing outputs, particularly for playful language transformations.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:22:43.239907",
+      "last_updated": "2024-11-29 12:23:34.951865"
+    },
+    {
+      "id": 20,
+      "content": "Awareness of common playful language transformations (e.g., Pig Latin) including rules for initial consonant movement and suffix addition should also encompass rules for capitalization, enhancing the accuracy in generating outputs.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:23:09.777360",
+      "last_updated": "2024-11-29 12:35:14.128749"
+    },
+    {
+      "id": 22,
+      "content": "Attention to capitalization and maintaining integrity of transformed words is crucial to ensure recognizability and consistency in playful language transformations.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:23:14.200349",
+      "last_updated": "2024-11-29 12:35:14.128738"
+    },
+    {
+      "id": 25,
+      "content": "Understanding that playful transformations often require a combination of relocation, sound accentuation, and rule-based adjustments for the specific structure of the output is crucial for achieving desired playful variations.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:23:19.200295",
+      "last_updated": "2024-11-29 12:23:19.200309"
+    },
+    {
+      "id": 26,
+      "content": "Recognizing patterns in how segments are reorganized and transformed can aid in consistently producing playful language outputs.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:23:19.200315",
+      "last_updated": "2024-11-29 12:23:19.200316"
+    },
+    {
+      "id": 29,
+      "content": "Developing a systematic approach for playful language transformations improves consistency and accuracy across various inputs.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:23:23.251380",
+      "last_updated": "2024-11-29 12:23:23.251380"
+    },
+    {
+      "id": 31,
+      "content": "\"Consistency in capitalization following transformation rules helps maintain the integrity and recognizability of the transformed word.\"",
+      "type": "positive",
+      "created_at": "2024-11-29 12:23:29.834383",
+      "last_updated": "2024-11-29 12:23:29.834384"
+    },
+    {
+      "id": 33,
+      "content": "Recognizing that in playful transformations like Pig Latin, moving the first consonant of a word to the end and adding 'ay' typically produces the expected output.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:23:34.951893",
+      "last_updated": "2024-11-29 12:23:34.951897"
+    },
+    {
+      "id": 35,
+      "content": "Understanding the application of different playful transformation rules (such as 'yodelling' language or 'Ubbi Dubbi') can expand the ability to generalize transformations beyond just Pig Latin.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:35:09.306556",
+      "last_updated": "2024-11-29 12:35:09.306562"
+    },
+    {
+      "id": 36,
+      "content": "Recognizing the importance of phonetics in playful language transformations can aid in accurately transforming words that may not fit standard consonant-vowel patterns.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:35:09.306566",
+      "last_updated": "2024-11-29 12:35:09.306566"
+    },
+    {
+      "id": 37,
+      "content": "Understanding the role of capitalization in transformed words is essential for preserving the integrity and recognizability of outputs in playful language transformations.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:35:14.128756",
+      "last_updated": "2024-11-29 12:35:14.128756"
+    },
+    {
+      "id": 38,
+      "content": "In playful language transformations, the original casing of the word must be preserved to ensure accurate representation and recognition of the transformed word.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:35:14.128759",
+      "last_updated": "2024-11-29 12:35:14.128759"
+    }
+  ],
+  "negative_knowledge": [
+    {
+      "id": 39,
+      "content": "Overlooking capitalization during word transformations can lead to significant discrepancies between expected and produced outputs, highlighting the importance of comprehensive rule application.",
+      "type": "negative",
+      "created_at": "2024-11-29 12:35:14.128761",
+      "last_updated": "2024-11-29 12:35:14.128762"
+    }
+  ]
 }
