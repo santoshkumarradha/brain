@@ -1,26 +1,61 @@
 {
-  "next_rule_id": 74,
-  "rules": {
-    "60": {
-      "content": "Develop a refined process for systematically condensing phrases into their phonetic essence by prioritizing the extraction of significant consonants, focusing on their frequency and semantic relevance, while minimizing vowels to enhance phonetic fidelity."
+  "next_entry_id": 15,
+  "entries": {
+    "1": {
+      "content": "In Pig Latin, for words starting with a consonant, move the first consonant or consonant cluster to the end of the word and add 'ay'. For words starting with a vowel, simply add 'way' at the end. Capitalization should be retained in the transformed output, meaning that the first letter of the original word should remain capitalized in the Pig Latin version if applicable.",
+      "knowledge_type": "general"
     },
-    "61": {
-      "content": "Intensively analyze the frequency and positioning of vowels within inputs to shape concise outputs, maintaining semantic integrity and ensuring the phonetic representation accurately targets the essence of the words involved."
+    "2": {
+      "content": "When transforming words into Pig Latin, capitalization rules must be observed to retain the case of the initial letter from the original word in the transformed output, ensuring consistent transformation for capitalized words.",
+      "knowledge_type": "positive"
     },
-    "68": {
-      "content": "Create procedures for continuous feedback and adjustment of transformation methods based on success metrics related to semantic completeness and phonetic representation."
+    "3": {
+      "content": "In Pig Latin, capitalized words must retain their capitalization in the transformed output. The first letter of the original word should be capitalized in the Pig Latin version as well, e.g., 'Hello' becomes 'Ellohay'.",
+      "knowledge_type": "positive"
     },
-    "69": {
-      "content": "Institute mechanisms to bridge the gap between semantic integrity and phonetic transformation, ensuring outputs not only sound coherent but also convey the intended messages effectively."
+    "4": {
+      "content": "When transforming words into Pig Latin, maintain the basis of the transformation by focusing only on the fundamental rules of consonants and vowels, regardless of affixes or grammatical forms.",
+      "knowledge_type": "general"
     },
-    "71": {
-      "content": "Implement a focused strategy for phonetic condensation that emphasizes extracting consonants first, thus sharpening the transformation process and producing concise outputs."
+    "5": {
+      "content": "In Pig Latin, the transformations should not take into account the original word's affixes or any grammatical forms, only the base form of the word.",
+      "knowledge_type": "general"
     },
-    "72": {
-      "content": "Develop a criterion to evaluate the phonetic relevance of both consonants and vowels in each input phrase, leading to the identification of essential elements that should be included in the output."
+    "6": {
+      "content": "In Pig Latin, if a word starts with a consonant that is capitalized, the transformed output must also retain that capitalization. For example, 'Python' transforms to 'Ythonpay'.",
+      "knowledge_type": "positive"
     },
-    "73": {
-      "content": "Create a feedback mechanism that assesses the quality of phonetic transformation, allowing for adaptations based on successful semantic representation in previous outputs."
+    "7": {
+      "content": "In Pig Latin, if a word starts with a consonant that is capitalized, the transformed output must also retain that capitalization, ensuring the first letter is capitalized in the output as well.",
+      "knowledge_type": "positive"
+    },
+    "8": {
+      "content": "In Pig Latin, it is essential that capitalized words in the input maintain their capitalization after transformation, ensuring the first letter is capitalized in the output as well.",
+      "knowledge_type": "positive"
+    },
+    "9": {
+      "content": "In Pig Latin, a capitalized word's transformed output must maintain its original capitalization format, meaning the first letter of the original word must match the case after transformation.",
+      "knowledge_type": "positive"
+    },
+    "10": {
+      "content": "To convert words to Pig Latin, follow these rules: 1) If a word starts with a consonant, move the first consonant or consonant cluster to the end and add 'ay'. 2) If it starts with a vowel, simply add 'way' to the end. 3) Ensure that capitalization of the original word is retained in the transformed output, meaning if the original word starts with a capital letter, the transformed output should also start with a capital letter. This applies to both consonantal and vowel-starting words.",
+      "knowledge_type": "positive"
+    },
+    "11": {
+      "content": "Pig Latin transformation rules: For consonants, move the first consonant or consonant cluster to the end and add 'ay'. For vowels, simply add 'way'. Original capitalization must be retained in the transformation.",
+      "knowledge_type": "general"
+    },
+    "12": {
+      "content": "When transforming words into Pig Latin, ensure that the first letter retains its capitalization from the original word. For instance, 'Apple' becomes 'Appleway' instead of 'appleway'.",
+      "knowledge_type": "positive"
+    },
+    "13": {
+      "content": "Transformations into Pig Latin should maintain the original capitalization of the first letter to ensure readability and consistency in output.",
+      "knowledge_type": "positive"
+    },
+    "14": {
+      "content": "When transforming words into Pig Latin, it is essential to consider the word's starting letter. Consonant rules apply when the first letter is not a vowel (a, e, i, o, u), and the transformation should respect original capitalization.",
+      "knowledge_type": "positive"
     }
   }
 }

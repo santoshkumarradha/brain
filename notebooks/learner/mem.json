@@ -1,0 +1,98 @@
+{
+  "next_knowledge_id": 60,
+  "positive_knowledge": [
+    {
+      "id": 21,
+      "content": "Transformations should always emphasize the importance of maintaining the original case of letters, particularly for proper nouns, ensuring phonetic integrity, clarity in the output, and case sensitivity. The casing must either be preserved as in the original or restored accurately, especially for the first letter.",
+      "type": "positive",
+      "created_at": "2024-11-29 01:46:22.727229",
+      "last_updated": "2024-11-29 01:47:27.235769"
+    },
+    {
+      "id": 34,
+      "content": "Transformations into playful iterations such as Pig Latin or similar variants must entail distinct phonetic rules, such as moving the initial consonant sound (or cluster) to the end of the word (while preserving vowel sounds), ensuring that case sensitivity is maintained by restoring the original casing as necessary.",
+      "type": "positive",
+      "created_at": "2024-11-29 01:46:51.502897",
+      "last_updated": "2024-11-29 01:47:13.827188"
+    },
+    {
+      "id": 39,
+      "content": "Transformations must prioritize restoring the original proper noun casing in the output to ensure clarity, correctness, and phonetic integrity, particularly when dealing with transformations involving proper nouns.",
+      "type": "positive",
+      "created_at": "2024-11-29 01:47:01.128924",
+      "last_updated": "2024-11-29 01:47:20.278777"
+    },
+    {
+      "id": 41,
+      "content": "Transformations must follow sequentially moving any leading consonants (or clusters) to the end of the word before appending the appropriate suffix based on language variant rules, ensuring that case sensitivity is preserved throughout the process to maintain clarity and correctness, especially for proper nouns. Additionally, first letter casing restoration is critical to maintain proper noun identification and phonetic clarity.",
+      "type": "positive",
+      "created_at": "2024-11-29 01:47:05.325343",
+      "last_updated": "2024-11-29 01:47:20.278790"
+    },
+    {
+      "id": 46,
+      "content": "Transformations should reconstruct the final output to reflect appropriate casing as per the original input, particularly for proper nouns, enhancing clarity and correctness.",
+      "type": "positive",
+      "created_at": "2024-11-29 01:47:13.827197",
+      "last_updated": "2024-11-29 01:47:13.827198"
+    },
+    {
+      "id": 48,
+      "content": "Proper noun transformations require an explicit step to check and preserve the original casing throughout the transformation process to maintain clarity (e.g., 'input' should lead to 'Output' and not 'output').",
+      "type": "positive",
+      "created_at": "2024-11-29 01:47:20.278798",
+      "last_updated": "2024-11-29 01:47:20.278799"
+    },
+    {
+      "id": 49,
+      "content": "When transforming words into playful forms such as Pig Latin, ensure that the first letter's casing in the output matches that of the input to maintain recognizable structure and integrity.",
+      "type": "positive",
+      "created_at": "2024-11-29 01:47:20.278802",
+      "last_updated": "2024-11-29 01:47:20.278802"
+    },
+    {
+      "id": 51,
+      "content": "Transformations applied to proper nouns should include explicit steps to verify and restore original case, ensuring clarity, phonetic integrity, and correctness throughout the transformation process.",
+      "type": "positive",
+      "created_at": "2024-11-29 01:47:23.553116",
+      "last_updated": "2024-11-29 01:47:27.235782"
+    },
+    {
+      "id": 52,
+      "content": "The output must not only adhere to phonetic rules but also implement necessary case transformations to accurately reflect the original input's structure.",
+      "type": "positive",
+      "created_at": "2024-11-29 01:47:23.553126",
+      "last_updated": "2024-11-29 01:47:23.553127"
+    },
+    {
+      "id": 54,
+      "content": "Transformations must include a dedicated step to assess and restore the first letter casing of proper nouns after phonetic alterations to maintain consistency and recognizability.",
+      "type": "positive",
+      "created_at": "2024-11-29 01:47:27.235792",
+      "last_updated": "2024-11-29 01:47:27.235793"
+    },
+    {
+      "id": 56,
+      "content": "Transformations must integrate a dedicated step to assess and restore the casing of all words post-transformation, particularly when rules involve phonetic changes.",
+      "type": "positive",
+      "created_at": "2024-11-29 01:47:30.931330",
+      "last_updated": "2024-11-29 01:47:30.931341"
+    },
+    {
+      "id": 58,
+      "content": "Transformations must integrate a defined methodology for assessing and restoring original letter casing before final output generation to ensure clarity, correctness, and phonetic integrity.",
+      "type": "positive",
+      "created_at": "2024-11-29 01:47:34.302659",
+      "last_updated": "2024-11-29 01:47:34.302666"
+    }
+  ],
+  "negative_knowledge": [
+    {
+      "id": 59,
+      "content": "Avoid transformations that apply phonetic changes without prior assessment of case conditions, to prevent outputs that misrepresent the original input's structure and clarity.",
+      "type": "negative",
+      "created_at": "2024-11-29 01:47:34.302670",
+      "last_updated": "2024-11-29 01:47:34.302671"
+    }
+  ]
+}
