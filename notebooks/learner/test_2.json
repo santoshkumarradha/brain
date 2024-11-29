@@ -1,84 +1,92 @@
 {
-  "next_id": 27,
+  "next_id": 32,
   "knowledge": {
     "1": {
       "description": "Understanding that simple letter manipulation can be part of transformations.",
       "knowledge_type": "positive",
       "successful_uses": 0,
-      "failed_uses": 9,
-      "last_validated": "2024-11-28T23:52:57.868979",
+      "failed_uses": 11,
+      "last_validated": "2024-11-28T23:53:04.549162",
       "is_general": true
     },
     "2": {
       "description": "Recognizing that specific linguistic transformations have defined rules.",
       "knowledge_type": "positive",
       "successful_uses": 0,
-      "failed_uses": 9,
-      "last_validated": "2024-11-28T23:52:57.868979",
+      "failed_uses": 11,
+      "last_validated": "2024-11-28T23:53:04.549162",
       "is_general": true
     },
     "9": {
       "description": "Recognizing the basic letter manipulation of moving the first letter to the end and applying 'way' in Pig Latin.",
       "knowledge_type": "positive",
       "successful_uses": 0,
-      "failed_uses": 6,
-      "last_validated": "2024-11-28T23:52:57.868979",
+      "failed_uses": 8,
+      "last_validated": "2024-11-28T23:53:04.549162",
       "is_general": true
     },
     "10": {
       "description": "Understanding the basic structure of words and the mechanics of converting them into another form.",
       "knowledge_type": "positive",
       "successful_uses": 0,
-      "failed_uses": 6,
-      "last_validated": "2024-11-28T23:52:57.868979",
+      "failed_uses": 8,
+      "last_validated": "2024-11-28T23:53:04.549162",
       "is_general": true
     },
     "15": {
       "description": "Correctly moved the first letter to the end of the word in a Pig Latin transformation.",
       "knowledge_type": "positive",
       "successful_uses": 0,
-      "failed_uses": 4,
-      "last_validated": "2024-11-28T23:52:57.868979",
+      "failed_uses": 6,
+      "last_validated": "2024-11-28T23:53:04.549162",
       "is_general": true
     },
     "16": {
       "description": "Applied a suffix to the transformed word.",
       "knowledge_type": "positive",
       "successful_uses": 0,
-      "failed_uses": 4,
-      "last_validated": "2024-11-28T23:52:57.868979",
+      "failed_uses": 6,
+      "last_validated": "2024-11-28T23:53:04.549162",
       "is_general": true
     },
     "19": {
       "description": "Successfully moved the first letter to the end of the word for Pig Latin transformation.",
       "knowledge_type": "positive",
       "successful_uses": 0,
-      "failed_uses": 3,
-      "last_validated": "2024-11-28T23:52:57.868979",
+      "failed_uses": 5,
+      "last_validated": "2024-11-28T23:53:04.549162",
       "is_general": true
     },
     "22": {
       "description": "Successfully moved the first letter to the end of the word.",
       "knowledge_type": "positive",
       "successful_uses": 0,
-      "failed_uses": 2,
-      "last_validated": "2024-11-28T23:52:57.868979",
+      "failed_uses": 4,
+      "last_validated": "2024-11-28T23:53:04.549162",
       "is_general": true
     },
-    "25": {
+    "27": {
+      "description": "Correctly moved the first letter to the end of the word in a Pig Latin transformation (learn -> earn)",
+      "knowledge_type": "positive",
+      "successful_uses": 0,
+      "failed_uses": 2,
+      "last_validated": "2024-11-28T23:53:04.549162",
+      "is_general": true
+    },
+    "30": {
       "description": "Failed to capitalize the first letter of the transformed word.",
       "knowledge_type": "negative",
       "successful_uses": 0,
       "failed_uses": 1,
-      "last_validated": "2024-11-28T23:52:57.868979",
+      "last_validated": "2024-11-28T23:53:04.549162",
       "is_general": true
     },
-    "26": {
-      "description": "Misapplied the correct suffix for Pig Latin (should use 'ay' instead of 'way').",
+    "31": {
+      "description": "Failed to use the correct suffix for Pig Latin (should use 'ay' instead of 'way').",
       "knowledge_type": "negative",
       "successful_uses": 0,
       "failed_uses": 1,
-      "last_validated": "2024-11-28T23:52:57.868979",
+      "last_validated": "2024-11-28T23:53:04.549162",
       "is_general": true
     }
   }
