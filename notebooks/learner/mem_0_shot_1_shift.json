@@ -1,0 +1,56 @@
+{
+  "next_knowledge_id": 113,
+  "positive_knowledge": [
+    {
+      "id": 60,
+      "content": "Transformations should explicitly incorporate user-defined formats, including acronym formation, summarization, and case sensitivity as primary considerations in response to specific user inputs.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:12:53.527756",
+      "last_updated": "2024-11-29 12:13:06.532218"
+    },
+    {
+      "id": 72,
+      "content": "Transformations involving acronym formation must explicitly prioritize user-defined formats, including case specifications, to ensure that the output matches user expectations and the requested format.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:13:15.777069",
+      "last_updated": "2024-11-29 12:14:14.714761"
+    },
+    {
+      "id": 90,
+      "content": "Acronym formation should be recognized as a common transformation request, requiring the system to prioritize the extraction of initial characters from each word of the input.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:13:49.623450",
+      "last_updated": "2024-11-29 12:13:49.623451"
+    },
+    {
+      "id": 94,
+      "content": "Successful transformations must fully incorporate user-specified formats, including but not limited to acronym formation and case sensitivity, to align outputs with user expectations and respect for the requested case format.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:13:58.944033",
+      "last_updated": "2024-11-29 12:14:10.820650"
+    },
+    {
+      "id": 106,
+      "content": "Generalizing from input-output transformations requires attention to user specifications regarding format, especially case sensitivity.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:14:18.169579",
+      "last_updated": "2024-11-29 12:14:18.169580"
+    },
+    {
+      "id": 111,
+      "content": "Effective transformation rules must prioritize case sensitivity, ensuring that acronym outputs match user specifications.",
+      "type": "positive",
+      "created_at": "2024-11-29 12:14:26.771042",
+      "last_updated": "2024-11-29 12:14:26.771047"
+    }
+  ],
+  "negative_knowledge": [
+    {
+      "id": 112,
+      "content": "Neglecting to apply user-defined format specifications can result in inaccuracies in outputs, particularly in cases where case sensitivity is a factor.",
+      "type": "negative",
+      "created_at": "2024-11-29 12:14:26.771051",
+      "last_updated": "2024-11-29 12:14:26.771051"
+    }
+  ]
+}
