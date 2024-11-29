@@ -1,0 +1,84 @@
+{
+  "next_knowledge_id": 102,
+  "positive_knowledge": [
+    {
+      "id": 1,
+      "content": "Identify and extract all relevant key elements from a given phrase to enable transformation into a more concise format, emphasizing the comprehensive concatenation of initials from each significant word, ensuring that every significant word's initial is included in the final result.",
+      "type": "positive",
+      "created_at": "2024-11-29 08:42:24.953569",
+      "last_updated": "2024-11-29 08:45:02.413030"
+    },
+    {
+      "id": 7,
+      "content": "Transformation rules should prioritize the use of initials as a valid method for creating concise representations of phrases.",
+      "type": "positive",
+      "created_at": "2024-11-29 08:42:38.429402",
+      "last_updated": "2024-11-29 08:42:38.429408"
+    },
+    {
+      "id": 63,
+      "content": "The system's evaluation for contextual significance must include a clearer framework for categorizing words based on both frequency and impact on meaning, with examples to clarify distinctions.",
+      "type": "positive",
+      "created_at": "2024-11-29 08:44:47.494272",
+      "last_updated": "2024-11-29 08:46:11.941081"
+    },
+    {
+      "id": 66,
+      "content": "Transformation rules should be expanded to explicitly include attributes of contextual relevance, differentiating between significant words and those that carry less semantic weight, with examples.",
+      "type": "positive",
+      "created_at": "2024-11-29 08:44:52.514063",
+      "last_updated": "2024-11-29 08:46:11.941092"
+    },
+    {
+      "id": 82,
+      "content": "The system should explicitly define the case format for outputs in transformation rules, specifying expected formats with examples. It should emphasize that outputs are to be generated in lowercase unless otherwise specified.",
+      "type": "positive",
+      "created_at": "2024-11-29 08:45:30.178991",
+      "last_updated": "2024-11-29 08:45:51.284416"
+    },
+    {
+      "id": 84,
+      "content": "The system should develop adaptability in distinguishing contextually significant words, such that it accurately identifies when specific words should be emphasized or downplayed based on varying scenarios or user queries.",
+      "type": "positive",
+      "created_at": "2024-11-29 08:45:33.884708",
+      "last_updated": "2024-11-29 08:45:33.884710"
+    },
+    {
+      "id": 90,
+      "content": "The identification of significant words should focus on their contribution to the core message of the original phrase, ensuring only necessary initials are included based on their relevance.",
+      "type": "positive",
+      "created_at": "2024-11-29 08:45:47.599509",
+      "last_updated": "2024-11-29 08:45:55.079473"
+    },
+    {
+      "id": 94,
+      "content": "The transformation process must adapt to cases where specific small words (like 'is,' 'the,' 'of') do not substantially alter the context or meaning, allowing for their initials to be omitted from the resultant output. This should also include a broader framework for identifying contextually significant versus insignificant words in varied scenarios.",
+      "type": "positive",
+      "created_at": "2024-11-29 08:45:55.079481",
+      "last_updated": "2024-11-29 08:46:05.025840"
+    },
+    {
+      "id": 98,
+      "content": "The identification process of significant words should involve context-based evaluation, leveraging syntactic and semantic cues to determine relevance and impact on the phrase's core message.",
+      "type": "positive",
+      "created_at": "2024-11-29 08:46:05.025856",
+      "last_updated": "2024-11-29 08:46:05.025857"
+    },
+    {
+      "id": 100,
+      "content": "Effective transformation relies on contextual understanding of word significance relative to the overall message of the phrase, enhancing the identification process for initial extraction.",
+      "type": "positive",
+      "created_at": "2024-11-29 08:46:11.941101",
+      "last_updated": "2024-11-29 08:46:11.941102"
+    }
+  ],
+  "negative_knowledge": [
+    {
+      "id": 101,
+      "content": "Avoid rigid adherence to common stop words as insignificant; the context may sometimes elevate their importance in specific phrases.",
+      "type": "negative",
+      "created_at": "2024-11-29 08:46:11.941106",
+      "last_updated": "2024-11-29 08:46:11.941106"
+    }
+  ]
+}
