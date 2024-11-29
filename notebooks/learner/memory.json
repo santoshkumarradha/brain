@@ -1,0 +1,23 @@
+{
+  "next_rule_id": 228,
+  "rules": {
+    "201": {
+      "content": "Establish a rule that transforms standard English words by moving the initial consonant or consonant cluster of each word to the end of the word and adding 'ay' to perform Pig Latin transformations, starting with a clear evaluation of the input structure."
+    },
+    "202": {
+      "content": "Implement comprehensive guidelines for determining capitalization in modified outputs, ensuring the output respects the original capitalization of the input, including the preservation of initial letters as uppercase when applicable. This should particularly include approaches for capitalization in Pig Latin transformations."
+    },
+    "218": {
+      "content": "Create a systematic approach to handle different scenarios where words starting with vowels or consonants are transformed while retaining the original phonetic integrity and expected capitalization in the output."
+    },
+    "219": {
+      "content": "Refine the phrasing to ensure that every modification guarantees the transformation respects both the phonetic nature of the word and the conventional rules of capitalization in various usages (e.g., title case vs sentence case)."
+    },
+    "226": {
+      "content": "Create a protocol for validating capitalization against the original word structure prior to the Pig Latin transformation to guarantee that the initial capitalization is not lost in the transformation process."
+    },
+    "227": {
+      "content": "Define a comprehensive rule that integrates capitalization preservation with the Pig Latin transformation, ensuring that transformed words maintain their original capitalization, especially for proper nouns and the first letter of the word if it was uppercase."
+    }
+  }
+}
