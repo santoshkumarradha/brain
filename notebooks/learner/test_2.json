@@ -1,92 +1,68 @@
 {
-  "next_id": 32,
+  "next_id": 83,
   "knowledge": {
-    "1": {
-      "description": "Understanding that simple letter manipulation can be part of transformations.",
-      "knowledge_type": "positive",
-      "successful_uses": 0,
-      "failed_uses": 11,
-      "last_validated": "2024-11-28T23:53:04.549162",
-      "is_general": true
-    },
-    "2": {
-      "description": "Recognizing that specific linguistic transformations have defined rules.",
-      "knowledge_type": "positive",
-      "successful_uses": 0,
-      "failed_uses": 11,
-      "last_validated": "2024-11-28T23:53:04.549162",
-      "is_general": true
-    },
-    "9": {
-      "description": "Recognizing the basic letter manipulation of moving the first letter to the end and applying 'way' in Pig Latin.",
-      "knowledge_type": "positive",
-      "successful_uses": 0,
-      "failed_uses": 8,
-      "last_validated": "2024-11-28T23:53:04.549162",
-      "is_general": true
-    },
-    "10": {
-      "description": "Understanding the basic structure of words and the mechanics of converting them into another form.",
-      "knowledge_type": "positive",
-      "successful_uses": 0,
-      "failed_uses": 8,
-      "last_validated": "2024-11-28T23:53:04.549162",
-      "is_general": true
-    },
-    "15": {
-      "description": "Correctly moved the first letter to the end of the word in a Pig Latin transformation.",
+    "69": {
+      "description": "Successful identification of consonants and their movement within Pig Latin transformation",
       "knowledge_type": "positive",
       "successful_uses": 0,
       "failed_uses": 6,
-      "last_validated": "2024-11-28T23:53:04.549162",
+      "last_validated": "2024-11-28T23:56:17.044101",
       "is_general": true
     },
-    "16": {
-      "description": "Applied a suffix to the transformed word.",
-      "knowledge_type": "positive",
-      "successful_uses": 0,
-      "failed_uses": 6,
-      "last_validated": "2024-11-28T23:53:04.549162",
-      "is_general": true
-    },
-    "19": {
-      "description": "Successfully moved the first letter to the end of the word for Pig Latin transformation.",
+    "72": {
+      "description": "Successful application of consonant sound movement in transformation rules.",
       "knowledge_type": "positive",
       "successful_uses": 0,
       "failed_uses": 5,
-      "last_validated": "2024-11-28T23:53:04.549162",
+      "last_validated": "2024-11-28T23:56:17.044101",
       "is_general": true
     },
-    "22": {
-      "description": "Successfully moved the first letter to the end of the word.",
+    "74": {
+      "description": "Correct movement of consonants (the 'c' in 'code' was moved correctly to the end)",
       "knowledge_type": "positive",
       "successful_uses": 0,
       "failed_uses": 4,
-      "last_validated": "2024-11-28T23:53:04.549162",
+      "last_validated": "2024-11-28T23:56:17.044101",
       "is_general": true
     },
-    "27": {
-      "description": "Correctly moved the first letter to the end of the word in a Pig Latin transformation (learn -> earn)",
+    "75": {
+      "description": "Correct addition of 'ay' after consonant movement",
+      "knowledge_type": "positive",
+      "successful_uses": 0,
+      "failed_uses": 4,
+      "last_validated": "2024-11-28T23:56:17.044101",
+      "is_general": true
+    },
+    "77": {
+      "description": "Successful transformation of consonant positioning and suffix addition.",
+      "knowledge_type": "positive",
+      "successful_uses": 0,
+      "failed_uses": 3,
+      "last_validated": "2024-11-28T23:56:17.044101",
+      "is_general": true
+    },
+    "79": {
+      "description": "Consonant movement and suffix addition were correctly applied.",
       "knowledge_type": "positive",
       "successful_uses": 0,
       "failed_uses": 2,
-      "last_validated": "2024-11-28T23:53:04.549162",
+      "last_validated": "2024-11-28T23:56:17.044101",
       "is_general": true
     },
-    "30": {
-      "description": "Failed to capitalize the first letter of the transformed word.",
+    "81": {
+      "description": "Correct movement of consonants to the end of the word.",
+      "knowledge_type": "positive",
+      "successful_uses": 0,
+      "failed_uses": 1,
+      "last_validated": "2024-11-28T23:56:17.044101",
+      "is_general": true
+    },
+    "82": {
+      "description": "Inconsistent application of capitalization rules during transformation.",
       "knowledge_type": "negative",
       "successful_uses": 0,
       "failed_uses": 1,
-      "last_validated": "2024-11-28T23:53:04.549162",
-      "is_general": true
-    },
-    "31": {
-      "description": "Failed to use the correct suffix for Pig Latin (should use 'ay' instead of 'way').",
-      "knowledge_type": "negative",
-      "successful_uses": 0,
-      "failed_uses": 1,
-      "last_validated": "2024-11-28T23:53:04.549162",
+      "last_validated": "2024-11-28T23:56:17.044101",
       "is_general": true
     }
   }
