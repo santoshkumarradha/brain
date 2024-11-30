@@ -161,21 +161,27 @@ def get_reasoner_ids(brain_client):
     def operational_reasoner(
         input_query: str, positive_context: str, negative_context: str
     ):
-        system_prompt = """You are an intelligent agent designed to provide accurate and consistent answers based on generalized knowledge.
-    Apply the positive knowledge effectively and avoid using knowledge items classified as negative.
-    Focus on transferring general principles to solve new queries."""
+        system_prompt = """You are an intelligent agent designed to provide accurate and consistent answers based on specific, actionable knowledge.
+
+    Guidelines:
+    - Apply the positive knowledge effectively.
+    - Avoid patterns or rules mentioned in the negative knowledge.
+    - Focus on generalizing patterns to solve new queries.
+    - Do not memorize specific input-output pairs."""
 
         user_prompt = f"""Query: {input_query}
 
+    ### Positive Knowledge (apply these patterns or rules):
     {positive_context}
 
+    ### Negative Knowledge (avoid these patterns or rules):
     {negative_context}
 
     Important:
     - Use the positive knowledge items to guide your answer.
-    - Avoid using any strategies or patterns mentioned in the negative knowledge items.
-    - Do not memorize specific input-output pairs; instead, apply general principles.
-    - Provide your answer that aligns with the main goal."""
+    - Avoid any strategies or patterns mentioned in the negative knowledge items.
+    - Provide your answer that aligns with the main goal.
+    - Think step by step before generating the output."""
 
         return system_prompt, user_prompt
 
@@ -188,92 +194,73 @@ def get_reasoner_ids(brain_client):
         positive_context: str,
         negative_context: str,
     ):
-        system_prompt = f"""You are a sophisticated learning feedback agent dedicated to extracting and refining knowledge to achieve the main goal.
+        system_prompt = f"""You are a learning feedback agent dedicated to improving the system's performance by extracting specific, actionable knowledge from input-output pairs.
 
     MAIN GOAL: {main_goal}
 
     Your Objectives:
     1. Analyze the differences between the system's answer and the correct answer.
-    2. Provide feedback on the system's reasoning in relation to the main goal.
-    3. Extract generalized, transferable knowledge that aligns with the main goal.
-    4. Identify what worked (positive knowledge) and what didn't work (negative knowledge).
-    5. Suggest modifications to existing knowledge or propose new knowledge items.
-    6. Enhance the system's ability to generalize to unseen data through the extracted knowledge.
+    2. Identify specific patterns, rules, or transformations that can explain the correct outputs.
+    3. Extract actionable knowledge that can help the system achieve the main goal.
+    4. Suggest modifications to existing knowledge or propose new knowledge items.
+    5. Enhance the system's ability to generalize to unseen data through the extracted knowledge.
 
-    Core Principles:
-    - Focus on underlying principles and patterns.
-    - Separate positive insights from negative ones.
-    - Ensure all knowledge is goal-oriented and transferable.
+    Guidelines:
+    - Focus on specific patterns or rules observed in the input-output pairs.
+    - Express knowledge items clearly and specifically, avoiding vague or generic statements.
+    - Ensure knowledge items are generalizable and can be applied to future queries.
+    - Avoid memorizing specific input-output pairs; extract underlying principles instead.
     """
 
-        user_prompt = f"""# DEEP LEARNING ANALYSIS
+        user_prompt = f"""# LEARNING ANALYSIS
 
     **GOAL TO ACHIEVE:** {main_goal}
 
-    ## Current Learning Instance:
+    ## Current Instance:
     - **Input Query:** {input_query}
     - **System Output:** {answer.answer}
     - **System Explanation:** {answer.explanation}
     - **Expected Output:** {correct_answer}
 
     ## Existing Knowledge:
-    ### Positive Knowledge:
+    ### Positive Knowledge (IDs provided):
     {positive_context}
 
-    ### Negative Knowledge:
+    ### Negative Knowledge (IDs provided):
     {negative_context}
 
     ## Your Tasks:
 
-    ### 1. Analysis:
+    1. **Analysis:**
     - Compare the system's output with the expected output.
-    - Analyze the system's reasoning in relation to the main goal.
-    - Identify fundamental understandings that would help achieve the goal.
-    - Reveal deeper patterns when comparing outputs.
-    - Determine core principles that would improve goal achievement.
+    - Identify specific patterns or rules that can explain the discrepancy.
+    - Determine what knowledge or reasoning is missing or incorrect.
 
-    ### 2. Feedback:
-    - Provide detailed feedback on what can be learned regarding the main goal.
-    - Highlight what worked (positive aspects) and what didn't work (negative aspects).
-    - Focus on general principles and patterns, not specific input-output pairs.
+    2. **Feedback:**
+    - Provide detailed feedback on how the system can improve.
+    - Highlight effective reasoning (to reinforce) and ineffective reasoning (to adjust).
 
-    ### 3. Knowledge Management:
-    - **Retain Knowledge**: List IDs of positive and negative knowledge items that should be retained as they are.
-    - **Modify Knowledge**: Suggest modifications to existing knowledge items that need enhancement or correction. Provide in the format:
-    [[knowledge_id, "enhanced or corrected content"]]
-    - **Add New Knowledge**:
-    - **New Positive Knowledge**: Add detailed new positive knowledge items that capture essential goal-relevant information.
-    - **New Negative Knowledge**: Add detailed new negative knowledge items that capture what should be avoided.
-    - **Remove Knowledge**: List IDs of knowledge items that should be removed if they are incorrect or unhelpful toward achieving the main goal.
+    3. **Knowledge Management:**
+    - **Retain Knowledge IDs:** List IDs of knowledge items to retain.
+    - **Modify Knowledge:** Suggest improvements to existing knowledge items in the format:
+        - `[knowledge_id, "updated content"]`
+    - **Add New Knowledge:**
+        - **Positive Knowledge:** New patterns or rules that help achieve the main goal.
+        - **Negative Knowledge:** Patterns or reasoning to avoid.
+    - **Remove Knowledge IDs:** List IDs of knowledge items to remove if they are incorrect or unhelpful.
 
     ## Instructions:
 
-    - **Use the provided IDs** to refer to specific knowledge items.
-    - **Do not memorize specific input-output pairs**; focus on generalizing principles to future similar queries.
-    - **Make the knowledge detailed and actionable** to effectively guide the system's learning process.
-    - **Add new knowledge** if existing knowledge is insufficient for future similar (not identical) queries.
-    - **Remove existing knowledge** only if it is incorrect and not relevant for future similar queries.
-    - **Modify existing knowledge** if it needs enhancement to achieve the main goal for future similar queries.
-    - **Retain existing knowledge** if it is important for achieving the main goal in future similar queries.
+    - **Use IDs** when referring to knowledge items.
+    - **Express knowledge items as specific patterns or rules** applicable to future queries.
+    - **Avoid referencing specific input-output pairs** in the knowledge items.
+    - **Ensure knowledge is actionable and directly improves performance** toward the main goal.
+    ## Important:
 
-    ## Focus Areas:
+    - Be detailed on your Knowledge accumulation.
+    - Do not include any hallucinations or irrelevant information.
+    - Focus on extracting knowledge that will help improve future performance in similar scenarios.
 
-    - Emphasize **deep understanding** over surface patterns.
-    - Prioritize **core principles** over specific solutions.
-    - Ensure knowledge is **transferable** to new, unseen data.
-    - Focus on **fundamental concepts** over specific applications.
-    - Concentrate on mechanisms that achieve the **main goal** over specific input-output pairs.
-
-    - If something is working, **provide positive feedback** to reinforce it.
-    - If something is not working, **provide negative feedback** to suppress it.
-
-    Important Notes:
-
-    Ensure that all parts of the output are filled appropriately.
-    Include all reasoning and analysis within the "feedback" field.
-    Be concise but thorough in your feedback and knowledge suggestions.
-    Do not include any extraneous text outside of the specified output format.
-    Focus on extracting general principles that will help improve future performance toward achieving the main goal.
     """
         return system_prompt, user_prompt
 
