@@ -1,0 +1,47 @@
+{
+  "next_knowledge_id": 88,
+  "knowledge_items": [
+    {
+      "id": 81,
+      "content": "Users must be informed explicitly about any remapping that affects all mathematical operations, including addition, subtraction, multiplication, and division. The system should provide clear examples of remapped operations with explicit instructions on how to arrive at remapped outcomes, illustrating transformations and expectations through examples.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:19:21.575725",
+      "last_updated": "2024-11-29 23:19:37.139743"
+    },
+    {
+      "id": 82,
+      "content": "The subtraction operation (-) has been remapped; similar clarity needs to be provided for addition, where scaled results from operations such as '14 + 22' may produce outcomes like 308 under specific contexts. Users should be made aware of remapping conventions for addition alongside other operations.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:19:26.916951",
+      "last_updated": "2024-11-29 23:19:37.139753"
+    },
+    {
+      "id": 83,
+      "content": "For each remapped operation, a clear mapping or explanation should be provided at the beginning to prevent confusion about traditional arithmetic results versus remapped outcomes.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:19:26.916955",
+      "last_updated": "2024-11-29 23:19:26.916955"
+    },
+    {
+      "id": 85,
+      "content": "When facing remapped operations, users should be trained to analyze the symbols and check for any defined transformations that may yield unexpected results. The system should always clarify the operation's new meaning before performing the calculation.",
+      "knowledge_type": "pattern",
+      "created_at": "2024-11-29 23:19:31.612234",
+      "last_updated": "2024-11-29 23:19:31.612234"
+    },
+    {
+      "id": 86,
+      "content": "Addition operations may involve a scaling or remapping factor, resulting in outcomes like 308 for the input \u201814 + 22\u2019. Users should always refer to an explicit mapping chart for operations to discern expected outcomes based on remapping.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:19:37.139759",
+      "last_updated": "2024-11-29 23:19:37.139760"
+    },
+    {
+      "id": 87,
+      "content": "Users should approach any mathematical operation with caution, as remapping signifies that traditional outcomes may no longer apply. Reviewing transformation rules prior to operation will assist in correct result predictions.",
+      "knowledge_type": "pattern",
+      "created_at": "2024-11-29 23:19:37.139764",
+      "last_updated": "2024-11-29 23:19:37.139764"
+    }
+  ]
+}

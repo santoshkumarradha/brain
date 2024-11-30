@@ -1,0 +1,54 @@
+{
+  "next_knowledge_id": 95,
+  "knowledge_items": [
+    {
+      "id": 20,
+      "content": "When transforming words by removing vowels, ensure that all vowels are systematically identified and removed from the input word. Assess which consonants should be retained to maintain a recognizable sound structure of transformed words, focusing on phonetic clarity.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:25:13.428639",
+      "last_updated": "2024-11-29 23:28:39.785387"
+    },
+    {
+      "id": 54,
+      "content": "In cases with multiple vowels, prioritize the removal of vowels not contributing to the recognizable sound structure of the word.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:27:17.114202",
+      "last_updated": "2024-11-29 23:29:06.095860"
+    },
+    {
+      "id": 76,
+      "content": "In vowel removal transformations, prefer to remove vowels that do not contribute to the core phonetic structure, ensuring the final output is phonetically identifiable.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:28:28.205019",
+      "last_updated": "2024-11-29 23:29:06.095884"
+    },
+    {
+      "id": 90,
+      "content": "In transformations, retain all consonants while removing strategically identified vowels to preserve the word's phonetic integrity and readers' ability to recognize it.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:29:06.095908",
+      "last_updated": "2024-11-29 23:29:06.095909"
+    },
+    {
+      "id": 91,
+      "content": "In words with multiple vowels, removing the vowels that contribute less to the phonetic clarity can enhance the recognizability of the resultant word. Maintain consonants essential for sound structure while aiming for phonetic integrity in output.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:29:10.192233",
+      "last_updated": "2024-11-29 23:29:10.192246"
+    },
+    {
+      "id": 93,
+      "content": "When transforming words by removing vowels, carefully analyze the remaining character structure to ensure that the result remains phonetically similar to the original word and is easily recognizable.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:29:23.530482",
+      "last_updated": "2024-11-29 23:29:23.530508"
+    },
+    {
+      "id": 94,
+      "content": "In shorter words, ensure that the retention of vowels aligns with maintaining phonetic clarity, particularly focusing on how each vowel influences pronunciation.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:29:23.530531",
+      "last_updated": "2024-11-29 23:29:23.530535"
+    }
+  ]
+}

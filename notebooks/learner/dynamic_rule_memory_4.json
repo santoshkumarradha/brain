@@ -1,0 +1,33 @@
+{
+  "next_knowledge_id": 41,
+  "knowledge_items": [
+    {
+      "id": 1,
+      "content": "When transforming a word, prioritize the retention of key vowels alongside consonants to ensure phonetic clarity. Simplify consonant clusters appropriately without compromising on the resulting word's recognizability.",
+      "knowledge_type": "transformation rule",
+      "created_at": "2024-11-29 23:40:22.353494",
+      "last_updated": "2024-11-29 23:42:48.378296"
+    },
+    {
+      "id": 3,
+      "content": "In transformations involving vowels, a balance should be aimed at, where key vowels that contribute to the phonetic identity are retained alongside a selective vowel removal to achieve compactness.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:40:26.654458",
+      "last_updated": "2024-11-29 23:42:48.378309"
+    },
+    {
+      "id": 37,
+      "content": "When transforming words, retain all significant consonants that contribute to the phonetic identity, including terminal consonants, to create a more coherent and representative output.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:42:43.307914",
+      "last_updated": "2024-11-29 23:42:43.307919"
+    },
+    {
+      "id": 40,
+      "content": "When simplifying a word, vowels and consonants can be strategically removed to achieve a desired compactness without losing the phonetic essence. Aim for the retention of one significant vowel and a minimal set of consonants that together form a recognizable and coherent output.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:42:53.397194",
+      "last_updated": "2024-11-29 23:42:53.397201"
+    }
+  ]
+}

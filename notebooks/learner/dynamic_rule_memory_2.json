@@ -1,0 +1,40 @@
+{
+  "next_knowledge_id": 20,
+  "knowledge_items": [
+    {
+      "id": 11,
+      "content": "In Pig Latin, after transforming a word starting with a consonant into Pig Latin, if the original first letter was uppercase, capitalize the first letter of the transformed word before appending 'ay'.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:21:41.065755",
+      "last_updated": "2024-11-29 23:21:53.231458"
+    },
+    {
+      "id": 12,
+      "content": "When transforming a word into Pig Latin, always check and adjust the capitalization of the transformed output based on the original input's first letter, regardless of whether it's a consonant or vowel start.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:21:48.210193",
+      "last_updated": "2024-11-29 23:21:53.231469"
+    },
+    {
+      "id": 17,
+      "content": "When transforming a word into Pig Latin, the transformation should result in the first letter of the output reflecting the capitalization of the original word's first letter, regardless of whether it started with a consonant or vowel.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:22:12.548013",
+      "last_updated": "2024-11-29 23:22:12.548019"
+    },
+    {
+      "id": 18,
+      "content": "In Pig Latin, when transforming a word starting with a consonant, the transformed output should maintain the original word's first letter's casing unless the first letter is uppercase, in which case it should be capitalized before appending 'ay'.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:22:17.910232",
+      "last_updated": "2024-11-29 23:22:17.910237"
+    },
+    {
+      "id": 19,
+      "content": "In Pig Latin, if the input word starts with a consonant and the first letter is uppercase, the transformed output's first letter should also be uppercase before adding 'ay'.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:22:24.259791",
+      "last_updated": "2024-11-29 23:22:24.259796"
+    }
+  ]
+}
