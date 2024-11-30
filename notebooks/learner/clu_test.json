@@ -1,0 +1,49 @@
+{
+  "next_knowledge_id": 10,
+  "positive_knowledge": [
+    {
+      "id": 1,
+      "content": "Accuracy in identifying national capitals is essential for a strong fundamental understanding of geography.",
+      "type": "positive",
+      "created_at": "2024-11-29 19:04:38.730558",
+      "last_updated": "2024-11-29 19:04:38.730563"
+    },
+    {
+      "id": 3,
+      "content": "Accurate identification of national capitals is foundational for understanding geography and enhances learning retention.",
+      "type": "positive",
+      "created_at": "2024-11-29 19:06:20.438890",
+      "last_updated": "2024-11-29 19:06:20.438896"
+    },
+    {
+      "id": 5,
+      "content": "Understanding national capitals is a fundamental aspect of geography; retention of accurate information is crucial for developing a broad understanding of world geography.",
+      "type": "positive",
+      "created_at": "2024-11-29 19:06:57.053857",
+      "last_updated": "2024-11-29 19:06:57.053862"
+    },
+    {
+      "id": 7,
+      "content": "Understanding that the capital city of a country is typically where its government is located helps in identifying them accurately.",
+      "type": "positive",
+      "created_at": "2024-11-29 19:08:05.914265",
+      "last_updated": "2024-11-29 19:08:05.914271"
+    },
+    {
+      "id": 8,
+      "content": "Establishing a clear distinction between state capitals and national capitals is vital for effective geographical communication.",
+      "type": "positive",
+      "created_at": "2024-11-29 19:08:05.914275",
+      "last_updated": "2024-11-29 19:08:05.914275"
+    }
+  ],
+  "negative_knowledge": [
+    {
+      "id": 9,
+      "content": "Avoid making assumptions about a city's capital status without confirming its government role.",
+      "type": "negative",
+      "created_at": "2024-11-29 19:08:05.914278",
+      "last_updated": "2024-11-29 19:08:05.914279"
+    }
+  ]
+}
