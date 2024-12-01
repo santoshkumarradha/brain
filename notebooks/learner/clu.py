@@ -157,7 +157,6 @@ class InferenceResult:
     knowledge_context: str
 
 
-# Function to get reasoner IDs
 def get_reasoner_ids(brain_client):
     @brain_client.reasoner(schema=OperationalResult)
     def operational_reasoner(
@@ -171,14 +170,14 @@ MAIN GOAL: {main_goal}
 
 Guidelines:
 - Use the knowledge items provided to guide your answer.
-- Pay attention to the type of each knowledge item (e.g., positive, negative, rule, pattern, etc.). These are examples of knowledge types, but they could be anything based on the context.
+- Pay attention to the type of each knowledge item (e.g., positive, negative, rule, pattern, etc.).
 - Apply the knowledge appropriately to generate your answer.
 - Do not memorize specific input-output pairs."""
 
         user_prompt = f"""## Query:
 {input_query}
 
-### Knowledge Items:
+### Knowledge Context:
 {knowledge_context}
 
 Important:
@@ -195,16 +194,35 @@ Important:
         system_output: str,
         expected_output: str,
     ):
-        system_prompt = f"""You are a meta-feedback agent whose role is to determine what the feedback agent should focus on to improve the system's performance.
+        system_prompt = f"""You are a meta-feedback agent tasked with guiding the feedback agent on what to focus on to improve system performance.
 
 MAIN GOAL: {main_goal}
 
-Your Objectives:
+Objectives:
 1. Analyze the differences between the system's output and the expected output.
-2. Determine specific areas, topics, or aspects that the feedback agent should focus on to help the system learn and improve.
-3. Provide a list of focus areas or guidelines for the feedback agent.
+2. Dynamically determine areas of improvement based on input, output, and the goal.
+3. Suggest categories like "rule", "pattern", "transformation", "mapping", "condition", "success", "failure", or other relevant topics based on your analysis.
+4. Guide the feedback agent to refine, add, or modify knowledge in a way that helps achieve the main goal.
 
-Consider what knowledge gaps exist and what learning would most effectively improve future performance."""
+Guidelines:
+- Be flexible in identifying focus areas. If new categories are needed, define them dynamically based on the context.
+- Focus on areas that will help the system generalize to unseen data.
+- Ensure that the focus areas address key knowledge gaps or emphasize successful strategies.
+
+Your Objectives:
+
+1. Analyze the discrepancies between the system's output and the expected output in the context of the main goal.
+2. Identify key areas of improvement that, if addressed, would most effectively enhance the system's ability to achieve the main goal.
+3. Provide a prioritized list of focus areas for the feedback agent to concentrate on, ensuring they are specific, actionable, and directly related to improving the system's performance.
+
+Guidelines:
+
+- Consider underlying patterns, rules, misconceptions, or gaps in knowledge that may have led to the discrepancies.
+- Focus on areas that will help the system generalize learning to new, unseen data.
+- Be concise yet comprehensive in identifying focus areas.
+- Avoid suggesting specific knowledge items; instead, outline areas for the feedback agent to explore and address.
+
+"""
 
         user_prompt = f"""## Analysis Context:
 
@@ -214,23 +232,35 @@ Consider what knowledge gaps exist and what learning would most effectively impr
 
 ## Instructions:
 
-- Identify key areas where the system needs improvement.
-- Determine what the feedback agent should focus on when providing feedback.
-- Focus on areas that will help the system generalize to new, unseen data.
-- Provide a concise list of focus areas or guidelines.
-- Guide if it needs to learn a non working method or rule or pattern or knowdlge type, or if something worked let it know that it worked and ask it to understand why it worked and store it in knowledge base for future reference.
-- This is a meta feedback that will guide feedback reasoner, which intern will work almost like reinforcement learning feedback loop for us to extract knowledge from the system guided by main goal.
+- Analyze the input-output pair in relation to the main goal.
+- Identify key focus areas for the feedback agent to work on, such as:
+  - Rules: Specific rules to add, refine, or remove.
+  - Patterns: Repeated structures or sequences to learn.
+  - Transformations: Input-to-output changes to generalize.
+  - Mappings: Specific relationships between input and output.
+  - Conditions: Context-dependent behaviors to consider.
+  - Successes: What worked well and why.
+  - Failures: What did not work and why.
+  - General: Broad insights or guidelines.
+
+
+- Carefully analyze the above context in relation to the main goal.
+- Identify specific areas where the system's knowledge or reasoning may be lacking or incorrect.
+- Determine what aspects, if improved, would most significantly enhance the system's performance.
+- Provide a prioritized list of focus areas for the feedback agent to address.
+
+
+- Dynamically suggest new focus areas if none of the above apply.
 
 ## Output Format:
 
-Provide your response in the following format:
+Provide your response as a list of focus areas in the following format:
 
 - **Focus Areas:**
   - "First focus area"
   - "Second focus area"
   - ...
-
-Do not include any additional text outside of the focus areas list."""
+"""
 
         return system_prompt, user_prompt
 
@@ -243,28 +273,42 @@ Do not include any additional text outside of the focus areas list."""
         knowledge_context: str,
         focus_areas: List[str],
     ):
-        system_prompt = f"""You are a learning feedback agent dedicated to improving the system's performance by extracting specific, actionable knowledge from input-output pairs.
+        system_prompt = f"""You are a feedback agent dedicated to improving the system's knowledge by extracting specific, actionable insights from input-output pairs.
 
 MAIN GOAL: {main_goal}
 
-Your Objectives:
-1. Analyze the differences between the system's answer and the correct answer.
-2. Based on the focus areas provided, decide what types of knowledge items are needed (e.g., positive, negative, rule, pattern, etc.), these are just examples of knowledge types, but they could be anything based on the context.
-3. Provide feedback and suggest knowledge items to add, modify, or remove.
-4. Enhance the system's ability to generalize to unseen data through the extracted knowledge.
+Objectives:
+1. Use the provided focus areas to guide your feedback.
+2. Analyze the differences between the system's output and the expected output to identify missing knowledge.
+3. Provide structured feedback, such as:
+   - Adding new knowledge items (e.g., rules, patterns, mappings, conditions).
+   - new knowledge could be like but not limited to "rule", "pattern", "transformation", "mapping", "condition", "success", "failure", or other relevant topics based on your analysis.
+   - You should come up with your own best knowldge types based on the context.
+   - Refining or modifying existing knowledge items.
+   - Removing incorrect or irrelevant knowledge items if you think current knowdlge might be useful in future, do not remove it.
+   - only remove if you think the knowledge is WRONG.
+4. Ensure the knowledge is actionable, generalizable, and improves future performance.
+1. Use the provided focus areas to guide your analysis and feedback.
+2. For each focus area, analyze how it relates to the current instance and the main goal.
+3. Identify specific knowledge gaps, misconceptions, or areas where new knowledge can be added or existing knowledge modified.
+4. Provide detailed, actionable knowledge updates that will help the system improve and generalize learning to future queries.
 
 Guidelines:
-- Focus on the specific areas mentioned in the focus areas.
-- Express knowledge items clearly and specifically, avoiding vague or generic statements.
-- Ensure knowledge items are generalizable and can be applied to future queries.
-- Avoid memorizing specific input-output pairs; extract underlying principles instead.
+
+- Address each focus area separately, providing clear and specific recommendations.
+- When suggesting new knowledge items, ensure they are generalizable and not tied to specific input-output pairs.
+- Categorize knowledge items appropriately (e.g., rule, pattern, strategy, misconception).
+- Avoid redundancy and focus on the most impactful updates.
+- Ensure that your feedback is directly aimed at helping the system achieve the main goal.
+
+Important: only remove if you think the knowledge is WRONG.
 """
 
         focus_areas_formatted = "\n".join(f"- {area}" for area in focus_areas)
 
-        user_prompt = f"""# LEARNING ANALYSIS
+        user_prompt = f"""# Feedback Analysis
 
-**GOAL TO ACHIEVE:** {main_goal}
+**Main Goal:** {main_goal}
 
 ## Current Instance:
 - **Input Query:** {input_query}
@@ -275,36 +319,29 @@ Guidelines:
 ## Focus Areas:
 {focus_areas_formatted}
 
-## Existing Knowledge Items:
+## Knowledge Context:
 {knowledge_context}
-
-## Your Tasks:
-
-1. **Analysis:**
-- Based on the focus areas, compare the system's output with the expected output.
-- Identify specific type of knowldge we can extract that can explain the discrepancy.
-- Determine what knowledge or reasoning is missing or incorrect.
-
-2. **Knowledge Management:**
-- **Retain Knowledge IDs:** List IDs of knowledge items to retain.
-- **Modify Knowledge:** Suggest improvements to existing knowledge items in the format:
-    - [knowledge_id, "updated content"]
-- **Add New Knowledge:** Provide new knowledge items to add, specifying the knowledge_type and content. Use the format:
-    - [knowledge_type, "content"]
-- **Remove Knowledge IDs:** List IDs of knowledge items to remove if they are incorrect or unhelpful.
 
 ## Instructions:
 
-- **Use IDs** when referring to knowledge items.
-- **Express knowledge items as specific patterns or rules** applicable to future queries.
-- **Ensure knowledge is actionable and directly improves performance** toward the main goal.
-- **Do not include any extraneous text** outside of the specified output format.
+1. Analyze each focus area and provide feedback.
+2. For each focus area:
+   - Identify missing or incorrect reasoning.
+   - Suggest new knowledge items, modifications, or deletions.
+3. Provide actionable insights in the following format:
 
-## Important:
+### Output Format:
+1. **Retain Knowledge IDs**: List IDs of knowledge items to retain.
+2. **Modify Knowledge**: Provide updates for existing knowledge items in the format:
+    - [knowledge_id, "updated content"]
+3. **Add Knowledge**: Suggest new knowledge items in the format:
+    - [knowledge_type, "content"]
+4. **Remove Knowledge IDs**: List IDs of knowledge items to remove if incorrect or irrelevant.
 
-- Be detailed in your knowledge accumulation.
-- Do not include any hallucinations or irrelevant information.
-- Focus on extracting knowledge that will help improve future performance in similar scenarios.
+### Important:
+- Use structured, actionable recommendations.
+- Ensure knowledge helps achieve the main goal and generalizes to unseen queries.
+- Be thorough and avoid unnecessary assumptions.
 
 """
 

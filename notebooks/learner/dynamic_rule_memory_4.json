@@ -1,33 +1,61 @@
 {
-  "next_knowledge_id": 41,
+  "next_knowledge_id": 50,
   "knowledge_items": [
     {
       "id": 1,
-      "content": "When transforming a word, prioritize the retention of key vowels alongside consonants to ensure phonetic clarity. Simplify consonant clusters appropriately without compromising on the resulting word's recognizability.",
-      "knowledge_type": "transformation rule",
-      "created_at": "2024-11-29 23:40:22.353494",
-      "last_updated": "2024-11-29 23:42:48.378296"
+      "content": "Transform words by selectively extracting consonants based on playful or informal expressions while ensuring that the transformed output captures a recognizable phonetic essence. Emphasize consonant retention rules for creating informal representations.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-29 23:59:04.146752",
+      "last_updated": "2024-11-30 00:00:59.141231"
     },
     {
-      "id": 3,
-      "content": "In transformations involving vowels, a balance should be aimed at, where key vowels that contribute to the phonetic identity are retained alongside a selective vowel removal to achieve compactness.",
+      "id": 5,
+      "content": "Extract the first vowel and consonants following patterns that create phonetic similarity with common informal language usage. Ensure that retained components effectively shorten the word, focusing on practice in creating more recognizable outputs. This may involve employing standing phonemes in subsequent positions.",
       "knowledge_type": "rule",
-      "created_at": "2024-11-29 23:40:26.654458",
-      "last_updated": "2024-11-29 23:42:48.378309"
+      "created_at": "2024-11-29 23:59:11.308093",
+      "last_updated": "2024-11-30 00:00:39.736134"
     },
     {
-      "id": 37,
-      "content": "When transforming words, retain all significant consonants that contribute to the phonetic identity, including terminal consonants, to create a more coherent and representative output.",
+      "id": 22,
+      "content": "In truncating words, consider the phonetic significance of consonant endings alongside vowel beginnings. Emphasize retaining vowels in the middle or end of the word for better phonetic balance while allowing for creative truncation. Ensure that the transformations facilitate a range of possible playful outputs.",
       "knowledge_type": "rule",
-      "created_at": "2024-11-29 23:42:43.307914",
-      "last_updated": "2024-11-29 23:42:43.307919"
+      "created_at": "2024-11-29 23:59:52.922674",
+      "last_updated": "2024-11-30 00:00:34.457210"
     },
     {
-      "id": 40,
-      "content": "When simplifying a word, vowels and consonants can be strategically removed to achieve a desired compactness without losing the phonetic essence. Aim for the retention of one significant vowel and a minimal set of consonants that together form a recognizable and coherent output.",
+      "id": 42,
+      "content": "Establish rules for vowel retention during truncation of words in playful contexts, encouraging the inclusion and emphasis of vowel sounds from within the original word to produce outputs that maintain an informal tone.",
       "knowledge_type": "rule",
-      "created_at": "2024-11-29 23:42:53.397194",
-      "last_updated": "2024-11-29 23:42:53.397201"
+      "created_at": "2024-11-30 00:00:46.744087",
+      "last_updated": "2024-11-30 00:00:46.744093"
+    },
+    {
+      "id": 45,
+      "content": "Develop a strategy that includes the exploration of consonant clusters and their role in the transformation process to maintain phonetic integrity while ensuring playfulness in output forms that may feature vowel consonants in varying order.",
+      "knowledge_type": "strategy",
+      "created_at": "2024-11-30 00:00:51.985291",
+      "last_updated": "2024-11-30 00:00:51.985296"
+    },
+    {
+      "id": 47,
+      "content": "Rule focusing on consonant extraction: Simplifying words may also involve the strategic removal of vowels while retaining consonant structures to form recognizable outputs. This can create a shorthand-like format that highlights the phonetic essence of the original word.",
+      "knowledge_type": "rule",
+      "created_at": "2024-11-30 00:00:59.141245",
+      "last_updated": "2024-11-30 00:00:59.141246"
+    },
+    {
+      "id": 48,
+      "content": "Mapping strategy for consonant-focused extraction: Develop a system that deduces expected outputs based on identifying dominant consonants in an input, suggesting that consonantal patterns form the basis of the transformational output instead of vowel patterns, which are received generally.",
+      "knowledge_type": "mapping",
+      "created_at": "2024-11-30 00:00:59.141249",
+      "last_updated": "2024-11-30 00:00:59.141249"
+    },
+    {
+      "id": 49,
+      "content": "Conditions for playful consonant truncation: Establish scenarios and contexts that encourage transforming words by focusing on consonants, especially in informal settings where playful language is favorable. This should outline criteria for when to choose consonants over vowels for playful outputs.",
+      "knowledge_type": "condition",
+      "created_at": "2024-11-30 00:00:59.141251",
+      "last_updated": "2024-11-30 00:00:59.141252"
     }
   ]
 }
