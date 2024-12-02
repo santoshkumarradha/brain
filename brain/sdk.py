@@ -1,4 +1,5 @@
 import base64
+import time
 from contextvars import ContextVar
 from datetime import datetime
 from functools import wraps
@@ -12,6 +13,7 @@ from rich import box
 from rich.console import Console
 from rich.table import Table
 from rich.text import Text
+from tenacity import retry, stop_after_delay, wait_chain, wait_exponential, wait_fixed
 
 from .utils import create_dynamic_pydantic_model
 
@@ -95,27 +97,51 @@ class BrainClient:
             print(f"Exception during serialization: {str(e)}")  # Debug print
             raise
 
-    def use(self, function_id):
+    def use(self, function_id, run_async=False):
         def wrapper(**inputs):
-            payload = {
-                "reasoner_id": function_id,
-                "inputs": base64.b64encode(cloudpickle.dumps(inputs)).decode("utf-8"),
-                "session_id": getattr(self, "_current_session", None),
-                "workflow_id": getattr(self, "_current_workflow", None),
-            }
+            if not run_async:
+                # Original synchronous execution
+                payload = {
+                    "reasoner_id": function_id,
+                    "inputs": base64.b64encode(cloudpickle.dumps(inputs)).decode(
+                        "utf-8"
+                    ),
+                    "session_id": getattr(self, "_current_session", None),
+                    "workflow_id": getattr(self, "_current_workflow", None),
+                }
 
-            response = requests.post(
-                f"{self.server_url}/execute_reasoner/", json=payload
-            )
-            if response.status_code != 200:
-                raise Exception("Failed to execute function")
-
-            response_data = response.json()
-            if response_data.get("schema"):
-                return create_dynamic_pydantic_model(response_data["schema"])(
-                    **response_data["result"]
+                response = requests.post(
+                    f"{self.server_url}/execute_reasoner/", json=payload
                 )
-            return response_data
+                if response.status_code != 200:
+                    raise Exception("Failed to execute function")
+
+                response_data = response.json()
+                if response_data.get("schema"):
+                    return create_dynamic_pydantic_model(response_data["schema"])(
+                        **response_data["result"]
+                    )
+                return response_data["result"]
+            else:
+                # Async execution
+                future_id = str(uuid4())
+                payload = {
+                    "reasoner_id": function_id,
+                    "inputs": base64.b64encode(cloudpickle.dumps(inputs)).decode(
+                        "utf-8"
+                    ),
+                    "session_id": getattr(self, "_current_session", None),
+                    "workflow_id": getattr(self, "_current_workflow", None),
+                    "future_id": future_id,
+                }
+
+                response = requests.post(
+                    f"{self.server_url}/execute_reasoner_async/", json=payload
+                )
+                if response.status_code != 200:
+                    raise Exception("Failed to execute function asynchronously")
+
+                return Future(self, future_id)
 
         return wrapper
 
@@ -214,23 +240,23 @@ class BrainClient:
         # Populate rows with formatted data
         for session in sessions:
             reasoner_calls = [
-            f"{call['reasoner_name']} ({round(call['duration'], 2)}s)"
-            for call in sorted(
-                session["reasoner_calls"], key=lambda x: x["timestamp"]
-            )
+                f"{call['reasoner_name']} ({round(call['duration'], 2)}s)"
+                for call in sorted(
+                    session["reasoner_calls"], key=lambda x: x["timestamp"]
+                )
             ]
 
             # Combine datetime into a human-readable format
             start_datetime = datetime.fromisoformat(session["start_time"]).strftime(
-            "%Y-%m-%d %H:%M:%S"
+                "%Y-%m-%d %H:%M:%S"
             )
 
             table.add_row(
-            session["session_id"],
-            session["multiagent_name"],
-            " → ".join(reasoner_calls),
-            start_datetime,
-            f"{round(session['total_duration'], 2)}",
+                session["session_id"],
+                session["multiagent_name"],
+                " → ".join(reasoner_calls),
+                start_datetime,
+                f"{round(session['total_duration'], 2)}",
             )
 
         # Render the table with a console
@@ -308,6 +334,9 @@ class BrainClient:
         console.print(table)
 
 
+# ------ Class to represent a multi-agent workflow ------
+
+
 class MultiAgent:
     def __init__(self, func, workflow_id, brain_client):
         self.func = func
@@ -338,3 +367,43 @@ class MultiAgent:
             # Clear context after run
             self.brain_client._current_session = None
             self.brain_client._current_workflow = None
+
+
+# ---- Async Future class to represent a future result ----
+class Future:
+    def __init__(self, client, future_id):
+        self.client = client
+        self.future_id = future_id
+
+    def get(self):
+        return self.result()
+
+    def result(self):
+        """Blocking call to get result with exponential backoff"""
+
+        @retry(
+            stop=stop_after_delay(60),
+            wait=wait_chain(
+                *[wait_fixed(0.1) for i in range(50)]
+                + [wait_fixed(0.5) for i in range(10)]
+                + [wait_exponential(multiplier=1, min=0.1, max=10)]
+            ),
+        )
+        def fetch_result():
+            response = requests.get(
+                f"{self.client.server_url}/get_future_result/{self.future_id}"
+            )
+            if response.status_code != 200:
+                raise Exception(f"Failed to get future result: {response.text}")
+
+            data = response.json()
+            if data["status"] == "completed":
+                result = data["result"]
+                if result.get("schema"):
+                    return create_dynamic_pydantic_model(result["schema"])(
+                        **result["result"]
+                    )
+                return result["result"]
+            raise Exception("Result not ready")
+
+        return fetch_result()

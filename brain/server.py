@@ -1,12 +1,13 @@
+import asyncio
 import base64
 import json
 import uuid
 from datetime import datetime, timezone
-from typing import List, Optional
+from typing import Dict, List, Optional
 from uuid import uuid4
 
 import cloudpickle
-from fastapi import FastAPI, HTTPException
+from fastapi import BackgroundTasks, FastAPI, HTTPException
 from pydantic import BaseModel, create_model
 from tinydb import Query, TinyDB
 
@@ -21,6 +22,8 @@ project_db = TinyDB("project_registry.json")
 reasoner_db = TinyDB("reasoner_registry.json")
 workflow_db = TinyDB("workflow_registry.json")
 lineage_db = TinyDB("lineage_registry.json")
+# TODO in-memory future storage we can move this to a database later
+future_registry: Dict[str, asyncio.Future] = {}
 
 
 class MultiModal(BaseModel):
@@ -286,3 +289,105 @@ async def list_multiagents(project_id: Optional[str] = None):
         conditions = Query_filter.project_id.exists()
     multiagents = workflow_db.search(conditions)
     return {"multiagents": multiagents}
+
+
+# ------ Async Execution ------
+
+
+class AsyncExecuteRequest(BaseModel):
+    reasoner_id: str
+    workflow_id: str | None = None
+    inputs: str  # base64 encoded pickled inputs
+    session_id: str | None = None
+    future_id: str  # To track this specific async request
+
+
+async def execute_reasoner_background(
+    request: AsyncExecuteRequest, future: asyncio.Future
+):
+    try:
+        reasoner_id = request.reasoner_id
+        Reasoner = Query()
+        result = reasoner_db.search(Reasoner.reasoner_id == reasoner_id)
+        if not result:
+            future.set_exception(
+                HTTPException(status_code=404, detail="Reasoner not found")
+            )
+            return
+
+        reasoner = cloudpickle.loads(base64.b64decode(result[0]["reasoner_code"]))
+        inputs = cloudpickle.loads(base64.b64decode(request.inputs))
+
+        # Capture start time
+        start_time = datetime.now(timezone.utc)
+
+        # Execute the reasoner
+        llm_input = reasoner(**inputs)
+        llm_input = convert_prompt(llm_input)
+
+        schema_dict = result[0].get("schema")
+        schema = create_dynamic_pydantic_model(schema_dict)
+
+        # Generate response asynchronously
+        response = await llm.generate_async(prompt=llm_input.format(), schema=schema)
+
+        # Capture stop time
+        stop_time = datetime.now(timezone.utc)
+        duration = (stop_time - start_time).total_seconds()
+
+        # Store lineage if session_id present
+        if request.session_id:
+            lineage_db.insert(
+                {
+                    "session_id": request.session_id,
+                    "reasoner_id": reasoner_id,
+                    "reasoner_name": result[0]["reasoner_name"],
+                    "workflow_id": request.workflow_id,
+                    "project_id": result[0]["project_id"],
+                    "inputs": str(inputs),
+                    "result": str(response),
+                    "timestamp": start_time.isoformat(),
+                    "stop_time": stop_time.isoformat(),
+                    "duration": duration,
+                }
+            )
+
+        # Set the result in future
+        future.set_result({"result": response, "schema": schema_dict})
+
+    except Exception as e:
+        future.set_exception(e)
+
+
+@app.post("/execute_reasoner_async/")
+async def execute_reasoner_async(
+    request: AsyncExecuteRequest, background_tasks: BackgroundTasks
+):
+    # Create a future for this request
+    future_id = request.future_id
+    loop = asyncio.get_event_loop()
+    future = loop.create_future()
+    future_registry[future_id] = future
+
+    # Schedule the execution in background
+    background_tasks.add_task(execute_reasoner_background, request, future)
+
+    return {"future_id": future_id}
+
+
+@app.get("/get_future_result/{future_id}")
+async def get_future_result(future_id: str):
+    if future_id not in future_registry:
+        raise HTTPException(status_code=404, detail="Future not found")
+
+    future = future_registry[future_id]
+    if not future.done():
+        return {"status": "pending"}
+
+    try:
+        result = future.result()
+        del future_registry[future_id]  # Cleanup
+        return {"status": "completed", "result": result}
+    except Exception as e:
+        del future_registry[future_id]  # Cleanup
+        raise HTTPException(status_code=500, detail=str(e))
