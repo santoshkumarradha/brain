@@ -49,6 +49,7 @@ class WorkflowRegisterRequest(BaseModel):
 
 class ExecuteRequest(BaseModel):
     reasoner_id: str
+    workflow_id: str | None = None  # Add workflow ID
     inputs: str  # base64 encoded pickled inputs
     session_id: str | None = None  # Optional session context
 
@@ -130,11 +131,14 @@ async def execute_reasoner(request: ExecuteRequest):
             {
                 "session_id": request.session_id,
                 "reasoner_id": reasoner_id,
-                "inputs": str(inputs),  # Store string representation of inputs
-                "result": str(response),  # Store string representation of result
+                "reasoner_name": result[0]["reasoner_name"],
+                "workflow_id": request.workflow_id,
+                "project_id": result[0]["project_id"],
+                "inputs": str(inputs),
+                "result": str(response),
                 "timestamp": start_time.isoformat(),
-                "stop_time": stop_time.isoformat(),  # Stop time
-                "duration": duration,  # Duration in seconds
+                "stop_time": stop_time.isoformat(),
+                "duration": duration,
             }
         )
 
@@ -187,3 +191,47 @@ async def create_project(request: ProjectCreate):
     }
     project_db.insert(project)
     return project
+
+
+@app.get("/list_runs")
+async def list_runs(workflow_name: str | None = None, project_id: str | None = None):
+    if not project_id:
+        project = await get_or_create_default_project()
+        project_id = project["project_id"]
+
+    Query_filter = Query()
+    conditions = Query_filter.project_id == project_id
+
+    if workflow_name:
+        workflow = workflow_db.get(
+            (Query_filter.workflow_name == workflow_name)
+            & (Query_filter.project_id == project_id)
+        )
+        if workflow:
+            conditions &= Query_filter.workflow_id == workflow["workflow_id"]
+
+    sessions = {}
+    for run in lineage_db.search(conditions):
+        session_id = run["session_id"]
+        if session_id not in sessions:
+            workflow = workflow_db.get(Query().workflow_id == run["workflow_id"])
+            sessions[session_id] = {
+                "session_id": session_id,
+                "multiagent_name": (
+                    workflow["workflow_name"] if workflow else "Direct Call"
+                ),
+                "reasoner_calls": [],
+                "start_time": run["timestamp"],
+                "total_duration": 0,
+            }
+
+        sessions[session_id]["reasoner_calls"].append(
+            {
+                "reasoner_name": run["reasoner_name"],
+                "timestamp": run["timestamp"],
+                "duration": run["duration"],
+            }
+        )
+        sessions[session_id]["total_duration"] += run["duration"]
+
+    return {"sessions": list(sessions.values())}
