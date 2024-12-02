@@ -2,8 +2,8 @@ import asyncio
 import base64
 import json
 import uuid
-from datetime import datetime, timezone
-from typing import Dict, List, Optional
+from datetime import datetime, timedelta, timezone
+from typing import Any, Dict, List, Optional, Tuple
 from uuid import uuid4
 
 import cloudpickle
@@ -55,6 +55,7 @@ class ExecuteRequest(BaseModel):
     workflow_id: str | None = None  # Add workflow ID
     inputs: str  # base64 encoded pickled inputs
     session_id: str | None = None  # Optional session context
+    modifier: str | None = None  # Add modifier field base64 encoded
 
 
 @app.post("/register_reasoner/")
@@ -100,50 +101,26 @@ async def register_workflow(request: WorkflowRegisterRequest):
 
 @app.post("/execute_reasoner/")
 async def execute_reasoner(request: ExecuteRequest):
-    reasoner_id = request.reasoner_id
+    response, schema_dict, start_time, duration = await _execute_reasoner_core(
+        reasoner_id=request.reasoner_id,
+        inputs=request.inputs,
+        modifier=request.modifier,
+        is_async=False,
+    )
+
     Reasoner = Query()
-    result = reasoner_db.search(Reasoner.reasoner_id == reasoner_id)
-    if not result:
-        raise HTTPException(status_code=404, detail="Reasoner not found")
+    reasoner_info = reasoner_db.search(Reasoner.reasoner_id == request.reasoner_id)[0]
 
-    reasoner = cloudpickle.loads(base64.b64decode(result[0]["reasoner_code"]))
-    inputs = cloudpickle.loads(base64.b64decode(request.inputs))
-
-    # Capture start time
-    start_time = datetime.now(timezone.utc)
-
-    # Execute the reasoner
-    llm_input = reasoner(**inputs)
-    llm_input = convert_prompt(llm_input)
-
-    schema_dict = result[0].get("schema")
-    schema = create_dynamic_pydantic_model(schema_dict)
-
-    # Generate response
-    response = llm.generate(prompt=llm_input.format(), schema=schema)
-    print(response)
-    # Capture stop time
-    stop_time = datetime.now(timezone.utc)
-
-    # Calculate duration
-    duration = (stop_time - start_time).total_seconds()
-
-    # Store lineage information if session_id is present
-    if request.session_id:
-        lineage_db.insert(
-            {
-                "session_id": request.session_id,
-                "reasoner_id": reasoner_id,
-                "reasoner_name": result[0]["reasoner_name"],
-                "workflow_id": request.workflow_id,
-                "project_id": result[0]["project_id"],
-                "inputs": str(inputs),
-                "result": str(response),
-                "timestamp": start_time.isoformat(),
-                "stop_time": stop_time.isoformat(),
-                "duration": duration,
-            }
-        )
+    _store_lineage(
+        session_id=request.session_id,
+        reasoner_id=request.reasoner_id,
+        workflow_id=request.workflow_id,
+        inputs=request.inputs,
+        response=response,
+        start_time=start_time,
+        duration=duration,
+        reasoner_info=reasoner_info,
+    )
 
     return {"result": response, "schema": schema_dict}
 
@@ -294,65 +271,127 @@ async def list_multiagents(project_id: Optional[str] = None):
 # ------ Async Execution ------
 
 
+def _store_lineage(
+    session_id: str,
+    reasoner_id: str,
+    workflow_id: Optional[str],
+    inputs: str,
+    response: Any,
+    start_time: datetime,
+    duration: float,
+    reasoner_info: dict,
+):
+    """Store execution lineage information"""
+    if not session_id:
+        return
+
+    lineage_db.insert(
+        {
+            "session_id": session_id,
+            "reasoner_id": reasoner_id,
+            "reasoner_name": reasoner_info["reasoner_name"],
+            "workflow_id": workflow_id,
+            "project_id": reasoner_info["project_id"],
+            "inputs": str(inputs),
+            "result": str(response),
+            "timestamp": start_time.isoformat(),
+            "stop_time": (start_time + timedelta(seconds=duration)).isoformat(),
+            "duration": duration,
+        }
+    )
+
+
+async def _execute_reasoner_core(
+    reasoner_id: str,
+    inputs: str,
+    modifier: Optional[str] = None,
+    is_async: bool = False,
+) -> Tuple[Any, dict, datetime, float]:
+    """
+    Core execution logic shared between sync and async execution paths.
+    Returns (response, schema_dict, start_time, duration)
+    """
+    Reasoner = Query()
+    result = reasoner_db.search(Reasoner.reasoner_id == reasoner_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="Reasoner not found")
+
+    reasoner = cloudpickle.loads(base64.b64decode(result[0]["reasoner_code"]))
+    decoded_inputs = cloudpickle.loads(base64.b64decode(inputs))
+    decoded_modifier = (
+        cloudpickle.loads(base64.b64decode(modifier)) if modifier else None
+    )
+
+    # Capture start time
+    start_time = datetime.now(timezone.utc)
+
+    # Execute the reasoner
+    llm_input = reasoner(**decoded_inputs)
+    llm_input = convert_prompt(llm_input)
+
+    schema_dict = result[0].get("schema")
+    schema = create_dynamic_pydantic_model(schema_dict)
+
+    # Generate response using modifier if provided
+    # TODO: Somehow we should be able to combine the two if conditions and have a default modifier that just calls llm.generate
+    if decoded_modifier:
+        if is_async:
+            response = await decoded_modifier.async_modify(
+                input=llm_input, schema=schema, model=llm
+            )
+        else:
+            response = decoded_modifier.modify(
+                input=llm_input, schema=schema, model=llm
+            )
+    else:
+        response = (
+            await llm.generate_async(prompt=llm_input.format(), schema=schema)
+            if is_async
+            else llm.generate(prompt=llm_input.format(), schema=schema)
+        )
+
+    # Calculate duration
+    duration = (datetime.now(timezone.utc) - start_time).total_seconds()
+
+    return response, schema_dict, start_time, duration
+
+
 class AsyncExecuteRequest(BaseModel):
     reasoner_id: str
     workflow_id: str | None = None
     inputs: str  # base64 encoded pickled inputs
     session_id: str | None = None
     future_id: str  # To track this specific async request
+    modifier: str | None = None  # base64 encoded pickled modifier
 
 
 async def execute_reasoner_background(
     request: AsyncExecuteRequest, future: asyncio.Future
 ):
     try:
-        reasoner_id = request.reasoner_id
+        response, schema_dict, start_time, duration = await _execute_reasoner_core(
+            reasoner_id=request.reasoner_id,
+            inputs=request.inputs,
+            modifier=request.modifier,
+            is_async=True,
+        )
+
         Reasoner = Query()
-        result = reasoner_db.search(Reasoner.reasoner_id == reasoner_id)
-        if not result:
-            future.set_exception(
-                HTTPException(status_code=404, detail="Reasoner not found")
-            )
-            return
+        reasoner_info = reasoner_db.search(Reasoner.reasoner_id == request.reasoner_id)[
+            0
+        ]
 
-        reasoner = cloudpickle.loads(base64.b64decode(result[0]["reasoner_code"]))
-        inputs = cloudpickle.loads(base64.b64decode(request.inputs))
+        _store_lineage(
+            session_id=request.session_id,
+            reasoner_id=request.reasoner_id,
+            workflow_id=request.workflow_id,
+            inputs=request.inputs,
+            response=response,
+            start_time=start_time,
+            duration=duration,
+            reasoner_info=reasoner_info,
+        )
 
-        # Capture start time
-        start_time = datetime.now(timezone.utc)
-
-        # Execute the reasoner
-        llm_input = reasoner(**inputs)
-        llm_input = convert_prompt(llm_input)
-
-        schema_dict = result[0].get("schema")
-        schema = create_dynamic_pydantic_model(schema_dict)
-
-        # Generate response asynchronously
-        response = await llm.generate_async(prompt=llm_input.format(), schema=schema)
-
-        # Capture stop time
-        stop_time = datetime.now(timezone.utc)
-        duration = (stop_time - start_time).total_seconds()
-
-        # Store lineage if session_id present
-        if request.session_id:
-            lineage_db.insert(
-                {
-                    "session_id": request.session_id,
-                    "reasoner_id": reasoner_id,
-                    "reasoner_name": result[0]["reasoner_name"],
-                    "workflow_id": request.workflow_id,
-                    "project_id": result[0]["project_id"],
-                    "inputs": str(inputs),
-                    "result": str(response),
-                    "timestamp": start_time.isoformat(),
-                    "stop_time": stop_time.isoformat(),
-                    "duration": duration,
-                }
-            )
-
-        # Set the result in future
         future.set_result({"result": response, "schema": schema_dict})
 
     except Exception as e:
@@ -363,13 +402,11 @@ async def execute_reasoner_background(
 async def execute_reasoner_async(
     request: AsyncExecuteRequest, background_tasks: BackgroundTasks
 ):
-    # Create a future for this request
     future_id = request.future_id
     loop = asyncio.get_event_loop()
     future = loop.create_future()
     future_registry[future_id] = future
 
-    # Schedule the execution in background
     background_tasks.add_task(execute_reasoner_background, request, future)
 
     return {"future_id": future_id}

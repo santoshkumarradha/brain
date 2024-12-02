@@ -15,6 +15,7 @@ from rich.table import Table
 from rich.text import Text
 from tenacity import retry, stop_after_delay, wait_chain, wait_exponential, wait_fixed
 
+from .modifiers.base import BaseModifier
 from .utils import create_dynamic_pydantic_model
 
 # Thread-local storage for session context
@@ -97,7 +98,9 @@ class BrainClient:
             print(f"Exception during serialization: {str(e)}")  # Debug print
             raise
 
-    def use(self, function_id, run_async=False):
+    def use(
+        self, function_id, modifier: Optional[BaseModifier] = None, run_async=False
+    ):
         def wrapper(**inputs):
             if not run_async:
                 # Original synchronous execution
@@ -108,6 +111,11 @@ class BrainClient:
                     ),
                     "session_id": getattr(self, "_current_session", None),
                     "workflow_id": getattr(self, "_current_workflow", None),
+                    "modifier": (
+                        base64.b64encode(cloudpickle.dumps(modifier)).decode("utf-8")
+                        if modifier
+                        else None
+                    ),
                 }
 
                 response = requests.post(
@@ -133,6 +141,11 @@ class BrainClient:
                     "session_id": getattr(self, "_current_session", None),
                     "workflow_id": getattr(self, "_current_workflow", None),
                     "future_id": future_id,
+                    "modifier": (
+                        base64.b64encode(cloudpickle.dumps(modifier)).decode("utf-8")
+                        if modifier
+                        else None
+                    ),
                 }
 
                 response = requests.post(
