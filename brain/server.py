@@ -2,6 +2,8 @@ import base64
 import json
 import uuid
 from datetime import datetime, timezone
+from typing import List
+from uuid import uuid4
 
 import cloudpickle
 from fastapi import FastAPI, HTTPException
@@ -15,7 +17,9 @@ from .utils import create_dynamic_pydantic_model
 app = FastAPI()
 llm = OpenAILLM(model_name="gpt-4o-mini")
 # TinyDB databases
+project_db = TinyDB("project_registry.json")
 reasoner_db = TinyDB("reasoner_registry.json")
+workflow_db = TinyDB("workflow_registry.json")
 lineage_db = TinyDB("lineage_registry.json")
 
 
@@ -24,10 +28,23 @@ class MultiModal(BaseModel):
     schema: dict | None = None
 
 
+class ProjectCreate(BaseModel):
+    name: str
+
+
 class RegisterRequest(BaseModel):
     reasoner_name: str
-    reasoner_code: str  # base64 encoded pickled reasoner
-    schema: dict | None = None  # JSON representation of the Pydantic model schema
+    reasoner_code: str
+    schema: dict = None
+    project_id: str
+    tags: List[str] = []
+
+
+class WorkflowRegisterRequest(BaseModel):
+    workflow_name: str
+    workflow_code: str
+    project_id: str
+    tags: List[str] = []
 
 
 class ExecuteRequest(BaseModel):
@@ -38,23 +55,43 @@ class ExecuteRequest(BaseModel):
 
 @app.post("/register_reasoner/")
 async def register_reasoner(request: RegisterRequest):
-    reasoner_name = request.reasoner_name
+    Project = Query()
+    if not project_db.search(Project.project_id == request.project_id):
+        raise HTTPException(status_code=404, detail="Project not found")
 
-    # Create a unique reasoner ID
-    reasoner_id = f"{reasoner_name}_v{len(reasoner_db) + 1}"
-    Reasoner = Query()
-    if reasoner_db.search(Reasoner.name == reasoner_name):
-        reasoner_id = reasoner_name  # Re-use the existing reasoner name
-
+    reasoner_id = str(uuid4())
     reasoner_db.insert(
         {
             "reasoner_id": reasoner_id,
-            "reasoner_name": reasoner_name,
+            "reasoner_name": request.reasoner_name,
             "reasoner_code": request.reasoner_code,
             "schema": request.schema,
+            "project_id": request.project_id,
+            "tags": request.tags,
+            "created_at": datetime.now(timezone.utc).isoformat(),
         }
     )
     return {"reasoner_id": reasoner_id}
+
+
+@app.post("/register_workflow/")
+async def register_workflow(request: WorkflowRegisterRequest):
+    Project = Query()
+    if not project_db.search(Project.project_id == request.project_id):
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    workflow_id = str(uuid4())
+    workflow_db.insert(
+        {
+            "workflow_id": workflow_id,
+            "workflow_name": request.workflow_name,
+            "workflow_code": request.workflow_code,
+            "project_id": request.project_id,
+            "tags": request.tags,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+    )
+    return {"workflow_id": workflow_id}
 
 
 @app.post("/execute_reasoner/")
@@ -117,3 +154,36 @@ async def get_call_graph(session_id: str):
     if not calls:
         raise HTTPException(status_code=404, detail="Session ID not found")
     return {"session_id": session_id, "lineage": calls}
+
+
+@app.post("/get_or_create_default_project/")
+async def get_or_create_default_project():
+    Project = Query()
+    default_project = project_db.search(Project.name == "workspace")
+    if default_project:
+        return default_project[0]
+
+    project_id = str(uuid4())
+    project = {
+        "project_id": project_id,
+        "name": "workspace",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    project_db.insert(project)
+    return project
+
+
+@app.post("/create_project/")
+async def create_project(request: ProjectCreate):
+    Project = Query()
+    if project_db.search(Project.name == request.name):
+        raise HTTPException(status_code=400, detail="Project name already exists")
+
+    project_id = str(uuid4())
+    project = {
+        "project_id": project_id,
+        "name": request.name,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    project_db.insert(project)
+    return project
