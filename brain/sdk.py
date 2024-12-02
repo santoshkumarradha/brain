@@ -29,13 +29,24 @@ class BrainClient:
             raise Exception("Failed to initialize default project")
         return response.json()
 
-    def create_project(self, name: str):
-        response = requests.post(
-            f"{self.server_url}/create_project/", json={"name": name}
+    def get_or_create_project(self, name: str):
+        response = requests.get(
+            f"{self.server_url}/get_project", params={"project_name": name}
         )
-        if response.status_code != 200:
-            raise Exception("Failed to create project")
+        if response.status_code == 404:
+            response = requests.post(
+                f"{self.server_url}/create_project/", json={"name": name}
+            )
+            if response.status_code != 200:
+                print(f"Error creating project: {response.text}")
+                raise Exception("Failed to create project")
+        elif response.status_code != 200:
+            print(f"Error getting project: {response.text}")
+            raise Exception("Failed to get project")
         return response.json()
+
+    def project(self, name: str):
+        return self.get_or_create_project(name)
 
     def register(self, func, schema=None, project=None, name=None, tags=None):
         function_code = base64.b64encode(cloudpickle.dumps(func)).decode("utf-8")
@@ -177,6 +188,7 @@ class BrainClient:
 
     def list_runs(self, multiagent_name: str = None, project=None):
         project_id = project["project_id"] if project else None
+        project_name = project["name"] if project else "Default Project"
         params = {"workflow_name": multiagent_name, "project_id": project_id}
         response = requests.get(f"{self.server_url}/list_runs", params=params)
 
@@ -184,8 +196,8 @@ class BrainClient:
             raise Exception("Failed to list runs")
 
         # Create the table with enhanced styling
-        table = Table(title="MultiAgent Session Runs", box=box.SIMPLE, show_lines=True)
-
+        table_title = f"MultiAgent Session Runs for Project: {project_name}"
+        table = Table(title=table_title, box=box.SIMPLE, show_lines=True)
         # Add columns with appropriate alignment and width
         table.add_column("Session ID", justify="left", overflow="fold", min_width=36)
         table.add_column("MultiAgent", justify="center")

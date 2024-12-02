@@ -2,7 +2,7 @@ import base64
 import json
 import uuid
 from datetime import datetime, timezone
-from typing import List
+from typing import List, Optional
 from uuid import uuid4
 
 import cloudpickle
@@ -180,8 +180,9 @@ async def get_or_create_default_project():
 @app.post("/create_project/")
 async def create_project(request: ProjectCreate):
     Project = Query()
-    if project_db.search(Project.name == request.name):
-        raise HTTPException(status_code=400, detail="Project name already exists")
+    existing_project = project_db.get(Project.name == request.name)
+    if existing_project:
+        return existing_project
 
     project_id = str(uuid4())
     project = {
@@ -193,8 +194,36 @@ async def create_project(request: ProjectCreate):
     return project
 
 
+async def get_project(
+    project_name: Optional[str] = None, project_id: Optional[str] = None
+):
+    if project_id:
+        project = project_db.get(Query().project_id == project_id)
+    elif project_name:
+        project = project_db.get(Query().project_name == project_name)
+    else:
+        raise HTTPException(
+            status_code=400, detail="Project name or ID must be provided"
+        )
+
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    return project
+
+
+@app.get("/get_project")
+async def get_project_endpoint(
+    project_name: Optional[str] = None, project_id: Optional[str] = None
+):
+    project = await get_project(project_name, project_id)
+    return project
+
+
 @app.get("/list_runs")
-async def list_runs(workflow_name: str | None = None, project_id: str | None = None):
+async def list_runs(
+    workflow_name: Optional[str] = None, project_id: Optional[str] = None
+):
     if not project_id:
         project = await get_or_create_default_project()
         project_id = project["project_id"]
