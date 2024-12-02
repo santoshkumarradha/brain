@@ -194,8 +194,13 @@ class BrainClient:
         table.add_column("Start Time", justify="center")
         table.add_column("Total Duration (s)", justify="center", max_width=19)
 
+        # Sort sessions by start time (latest first)
+        sessions = sorted(
+            response.json()["sessions"], key=lambda x: x["start_time"], reverse=True
+        )
+
         # Populate rows with formatted data
-        for session in response.json()["sessions"]:
+        for session in sessions:
             reasoner_calls = [
                 f"{call['reasoner_name']} ({round(call['duration'], 2)}s)"
                 for call in sorted(
