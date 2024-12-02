@@ -264,3 +264,25 @@ async def list_runs(
         sessions[session_id]["total_duration"] += run["duration"]
 
     return {"sessions": list(sessions.values())}
+
+
+@app.get("/list_reasoners")
+async def list_reasoners(project_id: Optional[str] = None):
+    Query_filter = Query()
+    if project_id:
+        conditions = Query_filter.project_id == project_id
+    else:
+        conditions = Query_filter.project_id.exists()
+    reasoners = reasoner_db.search(conditions)
+    return {"reasoners": reasoners}
+
+
+@app.get("/list_multiagents")
+async def list_multiagents(project_id: Optional[str] = None):
+    Query_filter = Query()
+    if project_id:
+        conditions = Query_filter.project_id == project_id
+    else:
+        conditions = Query_filter.project_id.exists()
+    multiagents = workflow_db.search(conditions)
+    return {"multiagents": multiagents}

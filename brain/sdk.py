@@ -1,5 +1,6 @@
 import base64
 from contextvars import ContextVar
+from datetime import datetime
 from functools import wraps
 from typing import Any, Dict, List, Optional
 from uuid import uuid4
@@ -144,12 +145,12 @@ class BrainClient:
 
         return decorator
 
-        def get_call_graph(self, session_id):
-            response = requests.get(f"{self.server_url}/get_call_graph/{session_id}")
-            if response.status_code == 200:
-                return response.json()
-            else:
-                raise Exception("Failed to fetch call graph")
+    def get_call_graph(self, session_id):
+        response = requests.get(f"{self.server_url}/get_call_graph/{session_id}")
+        if response.status_code == 200:
+            return response.json()
+        else:
+            raise Exception("Failed to fetch call graph")
 
     def reasoner(
         self, name=None, schema=None, project=None, tags=None, auto_register=True
@@ -196,14 +197,13 @@ class BrainClient:
             raise Exception("Failed to list runs")
 
         # Create the table with enhanced styling
-        table_title = f"MultiAgent Session Runs for Project: {project_name}"
+        table_title = f"MultiAgent Session Runs in Project: {project_name}"
         table = Table(title=table_title, box=box.SIMPLE, show_lines=True)
         # Add columns with appropriate alignment and width
         table.add_column("Session ID", justify="left", overflow="fold", min_width=36)
         table.add_column("MultiAgent", justify="center")
         table.add_column("Reasoner Calls", justify="left", max_width=20)
-        table.add_column("Start Date", justify="center")
-        table.add_column("Start Time", justify="center")
+        table.add_column("Start Date & Time", justify="center")
         table.add_column("Total Duration (s)", justify="center", max_width=19)
 
         # Sort sessions by start time (latest first)
@@ -214,27 +214,96 @@ class BrainClient:
         # Populate rows with formatted data
         for session in sessions:
             reasoner_calls = [
-                f"{call['reasoner_name']} ({round(call['duration'], 2)}s)"
-                for call in sorted(
-                    session["reasoner_calls"], key=lambda x: x["timestamp"]
-                )
+            f"{call['reasoner_name']} ({round(call['duration'], 2)}s)"
+            for call in sorted(
+                session["reasoner_calls"], key=lambda x: x["timestamp"]
+            )
             ]
 
-            # Split datetime into date and time
-            start_datetime = session["start_time"].split("T")
-            start_date = start_datetime[0]
-            start_time = start_datetime[1] if len(start_datetime) > 1 else ""
+            # Combine datetime into a human-readable format
+            start_datetime = datetime.fromisoformat(session["start_time"]).strftime(
+            "%Y-%m-%d %H:%M:%S"
+            )
 
             table.add_row(
-                session["session_id"],
-                session["multiagent_name"],
-                " → ".join(reasoner_calls),
-                start_date,
-                start_time,
-                f"{round(session['total_duration'], 2)}",
+            session["session_id"],
+            session["multiagent_name"],
+            " → ".join(reasoner_calls),
+            start_datetime,
+            f"{round(session['total_duration'], 2)}",
             )
 
         # Render the table with a console
+        console = Console(color_system="auto", width=200)
+        console.print(table)
+
+    def list_multiagents(self, project=None):
+        project_id = project["project_id"] if project else None
+        project_name = project["name"] if project else "Default Project"
+        params = {"project_id": project_id}
+        response = requests.get(f"{self.server_url}/list_multiagents", params=params)
+
+        if response.status_code != 200:
+            raise Exception("Failed to list multiagents")
+
+        # Create the table with enhanced styling
+        table_title = f"MultiAgents in Project: {project_name}"
+        table = Table(title=table_title, box=box.SIMPLE, show_lines=True)
+        table.add_column("MultiAgent", justify="left")
+        table.add_column("ID", justify="left", overflow="fold", min_width=36)
+        table.add_column("Tags", justify="left", max_width=20)
+        table.add_column("Created At", justify="center")
+
+        multiagents = response.json()["multiagents"]
+        multiagents = sorted(
+            response.json()["multiagents"], key=lambda x: x["created_at"], reverse=True
+        )
+        for multiagent in multiagents:
+            created_at = datetime.fromisoformat(multiagent["created_at"]).strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+            table.add_row(
+                multiagent["workflow_name"],
+                multiagent["workflow_id"],
+                ", ".join(multiagent["tags"]),
+                created_at,
+            )
+
+        console = Console(color_system="auto", width=200)
+        console.print(table)
+
+    def list_reasoners(self, project=None):
+        project_id = project["project_id"] if project else None
+        project_name = project["name"] if project else "Default Project"
+        params = {"project_id": project_id}
+        response = requests.get(f"{self.server_url}/list_reasoners", params=params)
+
+        if response.status_code != 200:
+            raise Exception("Failed to list reasoners")
+
+        # Create the table with enhanced styling
+        table_title = f"Reasoners in Project: {project_name}"
+        table = Table(title=table_title, box=box.SIMPLE, show_lines=True)
+        table.add_column("Reasoner", justify="left")
+        table.add_column("ID", justify="left", overflow="fold", min_width=36)
+        table.add_column("Tags", justify="left", max_width=20)
+        table.add_column("Created At", justify="center")
+
+        reasoners = response.json()["reasoners"]
+        reasoners = sorted(
+            response.json()["reasoners"], key=lambda x: x["created_at"], reverse=True
+        )
+        for reasoner in reasoners:
+            created_at = datetime.fromisoformat(reasoner["created_at"]).strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+            table.add_row(
+                reasoner["reasoner_name"],
+                reasoner["reasoner_id"],
+                ", ".join(reasoner["tags"]),
+                created_at,
+            )
+
         console = Console(color_system="auto", width=200)
         console.print(table)
 
