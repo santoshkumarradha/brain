@@ -1,5 +1,6 @@
 import base64
 import time
+import warnings
 from contextvars import ContextVar
 from datetime import datetime
 from functools import wraps
@@ -126,9 +127,16 @@ class BrainClient:
 
                 response_data = response.json()
                 if response_data.get("schema"):
-                    return create_dynamic_pydantic_model(response_data["schema"])(
-                        **response_data["result"]
-                    )
+                    try:
+                        return create_dynamic_pydantic_model(response_data["schema"])(
+                            **response_data["result"]
+                        )
+                    except:
+                        warnings.warn(
+                            f"Cannot create Pydantic model of type {response_data['schema']} from given response",
+                            RuntimeWarning,
+                        )
+
                 return response_data["result"]
             else:
                 # Async execution
