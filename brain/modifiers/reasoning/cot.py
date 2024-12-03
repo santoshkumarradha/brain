@@ -11,6 +11,8 @@ class COT(BaseModifier):
         self.num_steps = num_steps
 
     def get_cot_schema(self, num_steps: Optional[int], schema: Type[BaseModel]):
+        from typing import Any, Dict, List, Optional, Type
+
         class Thought(BaseModel):
             thought: str = Field(
                 ..., description="A single step in the chain of thought"
@@ -62,8 +64,9 @@ class COT(BaseModifier):
         input.text.system_prompt += (
             "\n\nPlease think step by step and provide a chain of thought reasoning "
             "with multiple steps with final step being the answer."
-            f"Think exactly for {self.num_steps} steps."
         )
+        if self.num_steps:
+            input.text.system_prompt += f"Think exactly for {self.num_steps} steps."
         cot_schema = self.get_cot_schema(self.num_steps, schema)
         response = model.generate(input.format(), schema=cot_schema)
         print(response)
