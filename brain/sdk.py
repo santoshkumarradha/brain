@@ -236,7 +236,7 @@ class BrainClient:
             raise Exception("Failed to create session")
         return response.json()
 
-    def list_runs(self, multiagent_name: str = None, project=None):
+    def list_runs(self, multiagent_name: str = None, project=None, return_data=False):
         project_id = project["project_id"] if project else None
         project_name = project["name"] if project else "Default Project"
         params = {"workflow_name": multiagent_name, "project_id": project_id}
@@ -285,6 +285,8 @@ class BrainClient:
         # Render the table with a console
         console = Console(color_system="auto", width=200)
         console.print(table)
+        if return_data:
+            return sessions
 
     def list_multiagents(self, project=None):
         project_id = project["project_id"] if project else None

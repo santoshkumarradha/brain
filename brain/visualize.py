@@ -217,7 +217,17 @@ def plot_workflow_matplotlib(lineage_data, legend=False):
         )
 
     # Format axes
-    plt.yticks(range(len(reasoners)), [i.replace("_", " ") for i in reasoners])
+    reasoner_names = sorted(
+        list({step["reasoner_name"] for step in lineage_data}),
+        key=lambda r: min(
+            start_times[i]
+            for i, step in enumerate(lineage_data)
+            if step["reasoner_name"] == r
+        ),
+    )
+    plt.yticks(
+        range(len(reasoner_names)), [i.replace("_", " ") for i in reasoner_names]
+    )
     plt.xticks(
         [t.timestamp() for t in grid_times],
         [t.strftime("%H:%M:%S") for t in grid_times],
