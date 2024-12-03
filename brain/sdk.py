@@ -136,7 +136,9 @@ class BrainClient:
                             f"Cannot create Pydantic model of type {response_data['schema']} from given response",
                             RuntimeWarning,
                         )
-
+                # TODO: Make this return some standard pydantic model with the response result as a field so that we can standardize the response
+                # NOTE: We will come here when modifier returns a schema that is not of type response_data["schema"] instead its own schema like for
+                # translation, or gaurdrail etc. In that case we will not be able to create a pydantic model of the response_data["schema"]
                 return response_data["result"]
             else:
                 # Async execution
