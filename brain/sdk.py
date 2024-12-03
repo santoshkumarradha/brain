@@ -236,7 +236,13 @@ class BrainClient:
             raise Exception("Failed to create session")
         return response.json()
 
-    def list_runs(self, multiagent_name: str = None, project=None, return_data=False):
+    def list_runs(
+        self,
+        multiagent_name: str = None,
+        project=None,
+        return_data=False,
+        print_table=True,
+    ):
         project_id = project["project_id"] if project else None
         project_name = project["name"] if project else "Default Project"
         params = {"workflow_name": multiagent_name, "project_id": project_id}
@@ -246,6 +252,7 @@ class BrainClient:
             raise Exception("Failed to list runs")
 
         # Create the table with enhanced styling
+
         table_title = f"MultiAgent Session Runs in Project: {project_name}"
         table = Table(title=table_title, box=box.SIMPLE, show_lines=True)
         # Add columns with appropriate alignment and width
@@ -282,9 +289,10 @@ class BrainClient:
                 f"{round(session['total_duration'], 2)}",
             )
 
-        # Render the table with a console
-        console = Console(color_system="auto", width=200)
-        console.print(table)
+        if print_table:
+            # Render the table with a console
+            console = Console(color_system="auto", width=200)
+            console.print(table)
         if return_data:
             return sessions
 

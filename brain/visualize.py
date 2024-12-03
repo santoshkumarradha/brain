@@ -236,7 +236,9 @@ def plot_workflow_matplotlib(lineage_data, legend=False):
     )
     plt.xlabel("Time (hh:mm:ss)", labelpad=20)  # Increase label padding
     plt.ylabel("Reasoners")
-    plt.title("Multi-Agent Workflow")
+    total_time = time_end - time_start
+    total_time_str = str(total_time).split(".")[0]  # Remove microseconds
+    plt.title(f"Multi-Agent Workflow (Total Time: {total_time_str})")
 
     # Adjust layout to avoid overlap
     if legend:
