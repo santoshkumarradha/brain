@@ -36,6 +36,13 @@ def cli():
 @click.option("--debug", is_flag=True, help="Run Brain in debug mode.")
 def start(debug):
     """Start Brain."""
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        console.print(
+            "[error]OPENAI_API_KEY environment variable is not set. Please set it and try again.[/error]"
+        )
+        return
+
     if debug:
         console.print("[info]Brain is powering up in debug mode...[/info]")
         try:
